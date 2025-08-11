@@ -10,14 +10,14 @@ const getCurrentPage = () => {
 const updateNavigationVisibility = async () => {
     const currentUser = await window.electronAPI.getCurrentUser();
     const authButton = document.getElementById('authButton');
-    
+
     // Ensure authButton is always properly initialized
     if (authButton) {
         authButton.style.display = '';
         authButton.disabled = false;
         authButton.classList.remove('hidden');
     }
-    
+
     const clientPortalLink = document.getElementById('clientPortalLink');
     const adminPanelLink = document.getElementById('adminPanelLink');
     const navLinks = document.querySelectorAll('.nav-links a');
@@ -46,7 +46,7 @@ const updateNavigationVisibility = async () => {
         // Not logged in - show sign in button
         authButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
         authButton.dataset.action = 'login';
-        
+
         // Keep navigation elements visible for unauthenticated browsing
         navLinks.forEach(link => link.style.display = '');
         if (reportsButton) reportsButton.style.display = '';
@@ -269,6 +269,16 @@ const calculateSampleStats = (sampleData, statsEndpoint) => {
 };
 
 
+// Utility function to switch tabs
+const switchTab = (tabName) => {
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabName);
+    });
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.toggle('active', content.id === `${tabName}Tab`);
+    });
+};
+
 // --- Common UI Elements and Event Listeners ---
 document.addEventListener('DOMContentLoaded', async () => {
     const authButton = document.getElementById('authButton');
@@ -287,7 +297,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // ENFORCE LOGIN: Check authentication immediately
     let currentUser = await window.electronAPI.getCurrentUser();
-    
+
     // MAIN FIX: Always show navigation elements initially
     document.querySelectorAll('.nav-container, .nav-actions').forEach(el => {
         if (el) el.style.display = '';
@@ -298,9 +308,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.querySelectorAll('.main-content').forEach(el => {
             if (el) el.style.display = 'none';
         });
-        
+
         // Show login modal
-        if (signInUpModal) signInUpModal.style.display = 'block';
+        if (signInUpModal) {
+            signInUpModal.style.display = 'block';
+            switchTab('signup'); // Default to sign-up tab
+        }
 
         // Prevent further script execution until login
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -322,6 +335,76 @@ document.addEventListener('DOMContentLoaded', async () => {
                 alert(result.message);
             }
         });
+
+        // Enhanced signup form submission
+        if (signupForm) {
+            signupForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Show loading state
+                const submitBtn = signupForm.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing Up...';
+                submitBtn.disabled = true;
+
+                try {
+                    // Get form data
+                    const name = document.getElementById('signupName').value.trim();
+                    const email = document.getElementById('signupEmail').value.trim();
+                    const password = document.getElementById('signupPassword').value;
+                    const role = document.getElementById('signupRole').value;
+
+                    // Client-side validation
+                    if (!name || !email || !password) {
+                        throw new Error('Please fill all required fields');
+                    }
+
+                    // Register user
+                    const result = await window.electronAPI.register({ name, email, password, role });
+
+                    if (result.success) {
+                        // Auto-login after successful signup
+                        const loginResult = await window.electronAPI.login({ email, password });
+
+                        if (loginResult.success) {
+                            // Close modal and update UI
+                            signInUpModal.style.display = 'none';
+                            await updateNavigationVisibility();
+
+                            // Show main content
+                            document.querySelectorAll('.main-content').forEach(el => {
+                                if (el) el.style.display = '';
+                            });
+
+                            // Handle first login if needed
+                            if (loginResult.user?.first_login) {
+                                if (firstLoginModal) document.getElementById('firstLoginModal').style.display = 'block';
+                                if (document.getElementById('newAdminName')) document.getElementById('newAdminName').value = loginResult.user.name;
+                                if (document.getElementById('newAdminEmail')) document.getElementById('newAdminEmail').value = loginResult.user.email;
+                            }
+
+                            // Refresh page state
+                            window.location.reload();
+                        } else {
+                            throw new Error('Automatic login failed. Please log in manually.');
+                        }
+                    } else {
+                        throw new Error(result.message || 'Registration failed');
+                    }
+                } catch (error) {
+                    // Show error message
+                    const errorElement = document.getElementById('signupError');
+                    if (errorElement) {
+                        errorElement.textContent = error.message;
+                        errorElement.style.display = 'block';
+                    }
+                } finally {
+                    // Reset button state
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                }
+            });
+        }
         return; // Stop further execution for unauthenticated users
     } else {
         // Show content for authenticated users
@@ -343,7 +426,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.querySelectorAll('.nav-container, .nav-actions').forEach(el => {
             if (el) el.style.display = '';
         });
-        
+
         if (currentUser) {
             authButton.innerHTML = '<i class="fas fa-sign-out-alt"></i> Sign Out';
             authButton.dataset.action = 'logout';
@@ -481,15 +564,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Enhanced tab switching
     tabButtons.forEach(button => {
         button.addEventListener('click', () => {
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            const targetTab = document.getElementById(`${button.dataset.tab}Tab`);
-            if (targetTab) targetTab.classList.add('active');
+            switchTab(button.dataset.tab);
         });
     });
 
