@@ -2,4 +2,5 @@
 errors/git push origin main error.md
 - errors/git commit error.md
 GenMaintPro-Desktop/node_modules/ 
-prompts.md
+prompts/prompts.md
+prompts/integrating `data.js` as sample data.md

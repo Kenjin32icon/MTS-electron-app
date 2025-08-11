@@ -799,6 +799,33 @@ const apiService = {
                         ]
                     };
 
+                case 'userRoleDistributionChartData': // New endpoint for user role distribution chart
+                    await checkPermission(userPermissions, 'permAdmin', userId, 'Attempt to view user role distribution chart data without admin permission');
+                    const userRoleCounts = await allQuery(db, `
+                        SELECT role, COUNT(*) AS count
+                        FROM users
+                        GROUP BY role
+                    `);
+                    await logUserAction(userId, 'VIEW_USER_ROLE_DISTRIBUTION_CHART', `Viewed user role distribution chart data`);
+                    return {
+                        labels: userRoleCounts.map(row => row.role),
+                        datasets: [{
+                            label: 'Number of Users',
+                            data: userRoleCounts.map(row => row.count),
+                            backgroundColor: [
+                                '#3498db', // Admin (blue)
+                                '#2ecc71', // Technician (green)
+                                '#f39c12'  // Client (orange)
+                            ],
+                            borderColor: [
+                                '#2980b9',
+                                '#27ae60',
+                                '#e67e22'
+                            ],
+                            borderWidth: 1
+                        }]
+                    };
+
                 default:
                     await logUserAction(userId, 'API_GET_UNKNOWN', `Unknown endpoint: ${endpoint}`);
                     throw new Error(`Unknown endpoint: ${endpoint}`);

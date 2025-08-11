@@ -1,4 +1,6 @@
 // FileName: /script.js
+// This is a conceptual script.js file.
+// It combines functionalities from various pages and includes new admin panel logic.
 
 import { initAuth } from './auth.js'; // Import the authentication initialization function
 
@@ -264,6 +266,20 @@ const calculateSampleStats = (sampleData, statsEndpoint) => {
                     { label: 'Quantity In Stock', data: partsStockLevels.map(row => row.quantity_in_stock), backgroundColor: '#3498db', borderColor: '#2980b9', borderWidth: 1 },
                     { label: 'Minimum Stock Level', data: partsStockLevels.map(row => row.min_stock_level), backgroundColor: '#e74c3c', borderColor: '#c0392b', borderWidth: 1 }
                 ]
+            };
+        case 'userRoleDistributionChartData': // New case for admin panel user role chart
+            const roleCounts = sampleData.users.reduce((acc, user) => {
+                acc[user.role] = (acc[user.role] || 0) + 1;
+                return acc;
+            }, {});
+            return {
+                labels: Object.keys(roleCounts),
+                datasets: [{
+                    data: Object.values(roleCounts),
+                    backgroundColor: ['#3498db', '#2ecc71', '#f39c12'],
+                    borderColor: '#fff',
+                    borderWidth: 1
+                }]
             };
         default:
             return {};
