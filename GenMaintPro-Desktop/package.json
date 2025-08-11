@@ -1,0 +1,19 @@
+{
+  "name": "genmaintpro-desktop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "bcrypt": "^6.0.0",
+    "electron": "^37.2.6",
+    "fs-extra": "^11.3.1",
+    "sqlite3": "^5.1.7",
+    "uuid": "^11.1.0"
+  }
+}
