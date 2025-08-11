@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenMaint Pro - Generator Registry</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Section - Replicated from other pages for consistency -->
+    <header>
+        <nav>
+            <div class="logo">
+                <div class="logo-placeholder" aria-label="GenMaint Pro Logo">GP</div>
+                <div class="title">
+                    <h1>GenMaint Pro</h1>
+                    <p>Generator Maintenance System</p>
+                </div>
+            </div>
+            <button class="menu-button" aria-label="Menu" aria-expanded="false">
+                <span class="menu-icon">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </span>
+                <span class="menu-text">Menu</span>
+            </button>
+            <div class="header-container">
+                <div class="nav-container" id="main-nav">
+                    <ul class="nav-links" role="menu">
+                        <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="registry.html" class="active"><i class="fas fa-list"></i> Registry</a></li>
+                        <li><a href="schedule.html"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
+                        <li><a href="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
+                        <li><a href="parts.html"><i class="fas fa-cogs"></i> Parts</a></li>
+                        <li><a href="team.html"><i class="fas fa-users"></i> Team</a></li>
+                    </ul>
+                </div>
+                <div class="nav-actions">
+                    <button class="toggle-button" id="darkModeToggle">
+                        <i class="fas fa-moon" id="darkModeIcon"></i>
+                        <span id="darkModeText">Light Mode</span>
+                    </button>
+                    <a href="reports.html" class="reports-button"><i class="fas fa-chart-bar"></i> Reports</a>
+                    <a href="signin.html" class="signing-button"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+                    <a href="clientportal.html" class="client-button"><i class="fas fa-user-circle"></i> Client Portal</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Section -->
+    <main>
+        <section class="registry-management service-records" aria-labelledby="registry-heading">
+            <div class="section-header">
+                <div>
+                    <h2 id="registry-heading"><i class="fas fa-list"></i> Generator Registry</h2>
+                    <p>Manage all registered generators and their details.</p>
+                </div>
+                <button class="reports-button" id="addNewGeneratorBtn"><i class="fas fa-plus-circle"></i> Add New Generator</button>
+            </div>
+
+            <!-- Filter Bar for Registry -->
+            <div class="filter-bar">
+                <input type="text" placeholder="Search by Model, Serial Number..." id="registrySearch">
+                <select id="registryTypeFilter">
+                    <option value="">All Types</option>
+                    <option value="Diesel">Diesel</option>
+                    <option value="Gasoline">Gasoline</option>
+                    <option value="Natural Gas">Natural Gas</option>
+                </select>
+                <select id="registryLocationFilter">
+                    <option value="">All Locations</option>
+                    <option value="Warehouse A">Warehouse A</option>
+                    <option value="Site B">Site B</option>
+                    <option value="Main Office">Main Office</option>
+                </select>
+                <input type="date" id="registryDateFrom" placeholder="From Date">
+                <input type="date" id="registryDateTo" placeholder="To Date">
+                <button id="applyRegistryFilters"><i class="fas fa-filter"></i> Apply Filters</button>
+                <button id="resetRegistryFilters"><i class="fas fa-redo"></i> Reset</button>
+            </div>
+
+            <div class="table-container">
+                <table id="registryTable">
+                    <thead>
+                        <tr>
+                            <th class="sortable" data-sort="model">Model</th>
+                            <th class="sortable" data-sort="type">Type</th>
+                            <th class="sortable" data-sort="serial">Serial Number</th>
+                            <th class="sortable" data-sort="location">Location</th>
+                            <th class="sortable" data-sort="purchaseDate">Purchase Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be populated dynamically via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination for Registry -->
+            <div class="pagination">
+                <button><i class="fas fa-chevron-left"></i></button>
+                <button class="active">1</button>
+                <button>2</button>
+                <button>3</button>
+                <button><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Generator Details Modal (similar to Service Details Modal) -->
+    <div class="modal" id="generatorDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Generator Details</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <h4>Basic Information</h4>
+                        <p><strong>Model:</strong> <span data-key="model">GenPro X100</span></p>
+                        <p><strong>Type:</strong> <span data-key="type">Diesel</span></p>
+                        <p><strong>Serial No:</strong> <span data-key="serial">SN-GPX100-001</span></p>
+                        <p><strong>Location:</strong> <span data-key="location">Warehouse A</span></p>
+                    </div>
+
+                    <div class="detail-card">
+                        <h4>Purchase & Warranty</h4>
+                        <p><strong>Purchase Date:</strong> <span data-key="purchaseDate">2022-01-15</span></p>
+                        <p><strong>Warranty End:</strong> <span data-key="warrantyEnd">2025-01-15</span></p>
+                        <p><strong>Supplier:</strong> <span data-key="supplier">Global Power Inc.</span></p>
+                        <p><strong>Cost:</strong> $<span data-key="cost">15,000</span></p>
+                    </div>
+
+                    <div class="detail-card">
+                        <h4>Operational Data</h4>
+                        <p><strong>Total Hours Run:</strong> <span data-key="totalHoursRun">1,250 hrs</span></p>
+                        <p><strong>Last Service:</strong> <span data-key="lastService">2024-03-10</span></p>
+                        <p><strong>Next Service Due:</strong> <span data-key="nextService">2024-09-10</span></p>
+                        <p><strong>Status:</strong> <span class="status-badge" data-key="status">Active</span></p>
+                    </div>
+
+                    <div class="detail-card">
+                        <h4>Client Information</h4>
+                        <p><strong>Client:</strong> <span data-key="client">ABC Corp</span></p>
+                        <p><strong>Contact:</strong> <span data-key="contact">jane.doe@abccorp.com</span></p>
+                        <p><strong>Client ID:</strong> <span data-key="clientId">CLI-001</span></p>
+                        <p><strong>Assigned Technician:</strong> <span data-key="assignedTech">John Doe</span></p>
+                    </div>
+                </div>
+
+                <div class="notes-section">
+                    <h4>Notes & History</h4>
+                    <div class="detail-card">
+                        <p data-key="notes">Initial setup completed without issues. Generator is primary backup for critical systems. Regular load testing recommended.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-close">Close</button>
+                <button class="btn-print"><i class="fas fa-print"></i> Print Details</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add New Generator Modal - IMPROVED -->
+    <div class="modal" id="addGeneratorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Generator</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-navigation-tabs">
+                    <button class="nav-tab active" data-section="basic">Basic Info</button>
+                    <button class="nav-tab" data-section="purchase">Purchase & Warranty</button>
+                    <button class="nav-tab" data-section="operational">Operational Data</button>
+                    <button class="nav-tab" data-section="client">Client Info</button>
+                    <button class="nav-tab" data-section="notes">Notes</button>
+                </div>
+
+                <form id="addGeneratorForm">
+                    <!-- Section 1: Basic Information -->
+                    <div class="form-section active" id="section-basic">
+                        <div class="detail-card">
+                            <h4>Basic Information</h4>
+                            <label for="newGenModel">Model:</label>
+                            <input type="text" id="newGenModel" name="model" placeholder="e.g., GenPro X100" required>
+
+                            <label for="newGenType">Type:</label>
+                            <select id="newGenType" name="type" required>
+                                <option value="">Select Type</option>
+                                <option value="Diesel">Diesel</option>
+                                <option value="Gasoline">Gasoline</option>
+                                <option value="Natural Gas">Natural Gas</option>
+                                <option value="Propane">Propane</option>
+                            </select>
+
+                            <label for="newGenSerial">Serial Number:</label>
+                            <input type="text" id="newGenSerial" name="serial" placeholder="e.g., SN-GPX100-004" required>
+
+                            <label for="newGenLocation">Location:</label>
+                            <input type="text" id="newGenLocation" name="location" placeholder="e.g., Site C, Building 1" required>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Purchase & Warranty -->
+                    <div class="form-section" id="section-purchase">
+                        <div class="detail-card">
+                            <h4>Purchase & Warranty</h4>
+                            <label for="newGenPurchaseDate">Purchase Date:</label>
+                            <input type="date" id="newGenPurchaseDate" name="purchaseDate" required>
+
+                            <label for="newGenWarrantyEnd">Warranty End Date:</label>
+                            <input type="date" id="newGenWarrantyEnd" name="warrantyEnd">
+
+                            <label for="newGenSupplier">Supplier:</label>
+                            <input type="text" id="newGenSupplier" name="supplier" placeholder="e.g., Global Power Inc.">
+
+                            <label for="newGenCost">Cost ($):</label>
+                            <input type="number" id="newGenCost" name="cost" placeholder="e.g., 15000" min="0">
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Operational Data -->
+                    <div class="form-section" id="section-operational">
+                        <div class="detail-card">
+                            <h4>Operational Data</h4>
+                            <label for="newGenTotalHours">Total Hours Run:</label>
+                            <input type="number" id="newGenTotalHours" name="totalHoursRun" placeholder="e.g., 1250" min="0">
+
+                            <label for="newGenLastService">Last Service:</label>
+                            <input type="date" id="newGenLastService" name="lastService">
+
+                            <label for="newGenNextService">Next Service Due:</label>
+                            <input type="date" id="newGenNextService" name="nextService">
+
+                            <label for="newGenStatus">Status:</label>
+                            <select id="newGenStatus" name="status" required>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="Under Maintenance">Under Maintenance</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Client Information -->
+                    <div class="form-section" id="section-client">
+                        <div class="detail-card">
+                            <h4>Client Information</h4>
+                            <label for="newGenClient">Client:</label>
+                            <input type="text" id="newGenClient" name="client" placeholder="e.g., ABC Corp">
+
+                            <label for="newGenContact">Contact Email:</label>
+                            <input type="email" id="newGenContact" name="contact" placeholder="e.g., client@example.com">
+
+                            <label for="newGenClientId">Client ID:</label>
+                            <input type="text" id="newGenClientId" name="clientId" placeholder="e.g., CLI-002">
+
+                            <label for="newGenAssignedTech">Assigned Technician:</label>
+                            <input type="text" id="newGenAssignedTech" name="assignedTech" placeholder="e.g., Jane Doe">
+                        </div>
+                    </div>
+
+                    <!-- Section 5: Notes -->
+                    <div class="form-section" id="section-notes">
+                        <div class="notes-section">
+                            <h4>Notes</h4>
+                            <div class="detail-card">
+                                <textarea id="newGenNotes" name="notes" rows="4" placeholder="Any additional notes or history..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-close">Cancel</button>
+                <button class="btn-print" id="prevGenSectionBtn" style="display: none;"><i class="fas fa-chevron-left"></i> Previous</button>
+                <button class="btn-print" id="nextGenSectionBtn">Next <i class="fas fa-chevron-right"></i></button>
+                <button class="btn-print" type="submit" form="addGeneratorForm" id="submitNewGenFormBtn" style="display: none;"><i class="fas fa-plus-circle"></i> Add Generator</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>

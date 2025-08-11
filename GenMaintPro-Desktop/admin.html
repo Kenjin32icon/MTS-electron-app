@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenMaint Pro - Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo">
+            <div class="logo-placeholder" aria-label="GenMaint Pro Logo">GP</div>
+            <div class="title">
+                <h1>GenMaint Pro</h1>
+                <p>Generator Maintenance System</p>
+            </div>
+        </div>
+        <button class="menu-button" aria-label="Menu" aria-expanded="false">
+            <span class="menu-icon">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </span>
+            <span class="menu-text">Menu</span>
+        </button>       
+        <div class="header-container">
+            <div class="nav-container" id="main-nav">
+                <ul class="nav-links" role="menu">
+                    <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="registry.html"><i class="fas fa-list"></i> Registry</a></li>
+                    <li><a href="schedule.html"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
+                    <li><a href="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
+                    <li><a href="parts.html"><i class="fas fa-cogs"></i> Parts</a></li>
+                    <li><a href="team.html"><i class="fas fa-users"></i> Team</a></li>
+                </ul>
+            </div>
+            <div class="nav-actions">
+                <button class="toggle-button" id="darkModeToggle">
+                    <i class="fas fa-moon" id="darkModeIcon"></i>
+                    <span id="darkModeText">Light Mode</span>
+                </button>
+                <a href="reports.html" class="reports-button"><i class="fas fa-chart-bar"></i> Reports</a>
+                <a href="signin.html" class="signing-button"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+                <a href="clientportal.html" class="client-button"><i class="fas fa-user-circle"></i> Client Portal</a>
+                <a href="admin.html" class="client-button"><i class="fas fa-user-shield"></i> Admin Panel</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <section class="admin-panel-section service-records" aria-labelledby="admin-heading">
+        <div class="section-header">
+            <div>
+                <h2 id="admin-heading"><i class="fas fa-user-shield"></i> Admin Panel</h2>
+                <p>Manage users, roles, and system settings.</p>
+            </div>
+            <button class="reports-button" id="addNewUserBtn"><i class="fas fa-user-plus"></i> Add New User</button>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card completed">
+                <div class="stat-label"><i class="fas fa-users"></i> Total Users</div>
+                <div class="stat-value" id="totalUsersCount">42</div>
+                <div class="stat-trend"><i class="fas fa-arrow-up"></i> +3 this month</div>
+            </div>
+            <div class="stat-card pending">
+                <div class="stat-label"><i class="fas fa-user-tag"></i> Admins</div>
+                <div class="stat-value" id="adminUsersCount">5</div>
+                <div class="stat-trend">2 full access, 3 limited</div>
+            </div>
+            <div class="stat-card overdue">
+                <div class="stat-label"><i class="fas fa-user-cog"></i> Technicians</div>
+                <div class="stat-value" id="techUsersCount">12</div>
+                <div class="stat-trend">8 active, 4 inactive</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label"><i class="fas fa-user-circle"></i> Clients</div>
+                <div class="stat-value" id="clientUsersCount">25</div>
+                <div class="stat-trend">15 premium, 10 standard</div>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <input type="text" placeholder="Search by Name, Email..." id="userSearch">
+            <select id="userRoleFilter">
+                <option value="">All Roles</option>
+                <option value="admin">Admin</option>
+                <option value="technician">Technician</option>
+                <option value="client">Client</option>
+            </select>
+            <select id="userStatusFilter">
+                <option value="">All Statuses</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+            <button id="applyUserFilters"><i class="fas fa-filter"></i> Apply Filters</button>
+            <button id="resetUserFilters"><i class="fas fa-redo"></i> Reset</button>
+        </div>
+
+        <div class="table-container">
+            <table id="userManagementTable">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-sort="name">Name</th>
+                        <th class="sortable" data-sort="email">Email</th>
+                        <th class="sortable" data-sort="role">Role</th>
+                        <th class="sortable" data-sort="lastLogin">Last Active</th>
+                        <th class="sortable" data-sort="status">Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- User data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <button><i class="fas fa-chevron-left"></i></button>
+            <button class="active">1</button>
+            <button>2</button>
+            <button>3</button>
+            <button><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+</main>
+
+<!-- Edit User Role Modal -->
+<div class="modal" id="editUserRoleModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Edit User Role & Permissions</h3>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="editUserRoleForm">
+                <div class="detail-card">
+                    <h4>User Information</h4>
+                    <p><strong>Name:</strong> <span id="modalUserName" data-key="name"></span></p>
+                    <p><strong>Email:</strong> <span id="modalUserEmail" data-key="email"></span></p>
+                    <p><strong>User ID:</strong> <span id="modalUserId" data-key="id"></span></p>
+                </div>
+
+                <div class="detail-card">
+                    <h4>Assign Role</h4>
+                    <label for="editUserRole">Role:</label>
+                    <select id="editUserRole" name="role" required data-key="role">
+                        <option value="client">Client</option>
+                        <option value="technician">Technician</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+
+                <div class="detail-card">
+                    <h4>Set Permissions</h4>
+                    <div class="permissions-grid" id="permissionsDisplay">
+                        <div class="permission-item">
+                            <input type="checkbox" id="permDashboard" checked disabled>
+                            <label for="permDashboard">Dashboard Access</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" id="permReports">
+                            <label for="permReports">Reports Access</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" id="permAdmin">
+                            <label for="permAdmin">Admin Privileges</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" id="permClientPortal" checked>
+                            <label for="permClientPortal">Client Portal</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <h4>Access Status</h4>
+                    <label for="userAccessStatus">Account Status:</label>
+                    <select id="userAccessStatus" name="status" data-key="status">
+                        <option value="active">Active</option>
+                        <option value="limited">Limited Access</option>
+                        <option value="suspended">Suspended</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-close">Cancel</button>
+            <button class="btn-delete">Disable Account</button>
+            <button class="reports-button" type="submit" form="editUserRoleForm"><i class="fas fa-save"></i> Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Add New User Modal (similar to Add Technician Modal) -->
+<div class="modal" id="addNewUserModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Add New User</h3>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="addNewUserForm">
+                <div class="detail-card">
+                    <h4>User Information</h4>
+                    <label for="newUserName">Full Name:</label>
+                    <input type="text" id="newUserName" name="name" required>
+
+                    <label for="newUserEmail">Email:</label>
+                    <input type="email" id="newUserEmail" name="email" required>
+
+                    <label for="newUserPassword">Password:</label>
+                    <input type="password" id="newUserPassword" name="password" required minlength="6">
+
+                    <label for="newUserRole">Role:</label>
+                    <select id="newUserRole" name="role" required>
+                        <option value="client">Client</option>
+                        <option value="technician">Technician</option>
+                        <option value="admin">Admin</option>
+                    </select>
+
+                    <label for="newUserStatus">Status:</label>
+                    <select id="newUserStatus" name="status" required>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-close">Cancel</button>
+            <button class="reports-button" type="submit" form="addNewUserForm"><i class="fas fa-user-plus"></i> Add User</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module" src="script.js"></script>
+<script>
+//Connect page-specific data
+// In admin.html's script
+document.addEventListener('DOMContentLoaded', async () => {
+  const users = await api.get('users');
+  renderUsersTable(users);
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,1416 @@
+:root {
+    --primary: #3F51B5;
+    --primary-dark: #303F9F;
+    --secondary: #607D8B;
+    --text: #333333;
+    --text-light: #757575;
+    --bg: #F4F4F4;
+    --card-bg: #FFFFFF;
+    --header-bg: #E0E0E0;
+    --border: #B0B0B0;
+    --positive: #4CAF50;
+    --warning: #FF9800;
+    --danger: #F44336;
+    --shadow: 0 4px 12px rgba(0,0,0,0.1);
+    --transition: all 0.3s ease;
+
+    /* New variables for consistency with status badges */
+    --completed-color: #4CAF50; /* Green */
+    --overdue-color: #F44336; /* Red */
+    --light-bg: #EFEFEF; /* Lighter background for calendar days not in current month */
+    --pending-color: #FF9800; /* Orange for pending, consistent with --warning */
+}
+
+.dark-mode {
+    --primary: #5677FC;
+    --primary-dark: #3F51B5;
+    --text: #effdff;
+    --text-light: #B0BEC5;
+    --bg: #020818;
+    --card-bg: #040c21;
+    --header-bg: #040c21;
+    --border: #1a237e;
+    --positive: #81C784;
+    --warning: #FFB74D;
+    --danger: #E57373;
+    --shadow: 0 4px 12px rgba(0,0,0,0.3);
+
+    /* Dark mode adjustments for new variables */
+    --completed-color: #81C784;
+    --overdue-color: #E57373;
+    --light-bg: #08122c; /* Darker lighter background for calendar days */
+    --pending-color: #FFB74D; /* Dark mode orange for pending */
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    transition: var(--transition);
+}
+
+/* Header and Navigation */
+header {
+    background-color: var(--header-bg);
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    gap: 20px;
+}
+
+.logo {
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-placeholder {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--primary), #2196F3);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.title h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: var(--primary);
+}
+
+.title p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: 20px;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 5px;
+}
+
+.nav-links li {
+    margin: 0;
+}
+
+.nav-links a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    background-color: rgba(63, 81, 181, 0.15);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.reports-button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.reports-button:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.toggle-button {
+    background-color: var(--secondary);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+}
+
+.toggle-button:hover {
+    background-color: #455A64;
+}
+
+.signing-button, .client-button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.signing-button:hover, .client-button:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+/* Main Content */
+main {
+    max-width: 1400px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.section-header h2 {
+    color: var(--text);
+    margin: 0;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-header p {
+    color: var(--text-light);
+    margin: 5px 0 0 0;
+}
+
+.export {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.export-button { /* This class is not used in index.html, but keeping it for consistency if it's intended for other pages */
+    background-color: var(--card-bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.export-button:hover {
+    background-color: var(--header-bg);
+    border-color: var(--primary);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: var(--card-bg);
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    z-index: 1;
+    top: 100%;
+    left: 0;
+    margin-top: 5px;
+    border: 1px solid var(--border);
+}
+
+.dropdown-menu button {
+    color: var(--text);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-menu button:hover {
+    background-color: rgba(63, 81, 181, 0.1);
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+/* Stats Cards */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    border-left: 4px solid var(--primary);
+}
+
+.stat-card.completed {
+    border-left-color: var(--positive);
+}
+
+.stat-card.pending {
+    border-left-color: var(--warning);
+}
+
+.stat-card.overdue {
+    border-left-color: var(--danger);
+}
+
+.stat-card .stat-value {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: var(--text);
+    margin: 10px 0;
+}
+
+.stat-card .stat-label {
+    font-size: 1rem;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Chart */
+.chart-container {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.chart-header h3 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.2rem;
+}
+
+.chart-legend {
+    display: flex;
+    gap: 15px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+}
+
+.color {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.color.current {
+    background-color: rgba(63, 81, 181, 0.8);
+}
+
+.color.previous {
+    background-color: rgba(96, 125, 139, 0.6);
+}
+
+#serviceTrendChart {
+    width: 100%;
+    height: 300px;
+}
+
+/* Mobile Menu Styles */
+.menu-button {
+    display: none; /* Hidden by default on larger screens */
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin-left: auto; /* Pushes button to the right */
+}
+
+.menu-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 20px;
+    width: 30px;
+}
+
+.bar {
+    height: 3px;
+    width: 100%;
+    background-color: var(--text);
+    transition: all 0.3s ease;
+}
+
+.menu-button.active .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.menu-button.active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-button.active .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+.menu-text {
+    font-size: 0.8em;
+    color: var(--text);
+    margin-top: 5px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .menu-button {
+        display: flex; /* Show on smaller screens */
+    }
+
+    .header-container {
+        display: none; /* Hidden by default */
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 100%; /* Position below the header */
+        left: 0;
+        background: var(--header-bg);
+        padding: 20px;
+        box-shadow: var(--shadow);
+        z-index: 99; /* Below sticky header, above main content */
+        align-items: flex-start; /* Align items to the start */
+    }
+
+    .header-container.active {
+        display: flex; /* Show when active */
+        max-height: calc(100vh - 70px); /* Adjust based on header height */
+        overflow-y: auto; /* Enable scrolling for the entire container */
+    }
+
+    .nav-container {
+        display: none; /* Hidden by default */
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--header-bg); /* Match header background */
+        padding: 0; /* Remove padding as it's handled by header-container */
+    }
+
+    .nav-container.active {
+        display: flex; /* Show when active */
+        /* Removed overflow-y from here as it's now on header-container.active */
+    }
+
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+        gap: 0; /* Remove gap for vertical list */
+    }
+
+    .nav-links li {
+        padding: 10px 0; /* Adjust padding for vertical list */
+        width: 100%;
+    }
+
+    .nav-links li a {
+        padding: 10px 20px; /* Add padding to links for click area */
+        width: 100%;
+        justify-content: flex-start; /* Align icons and text to start */
+    }
+
+    .nav-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        padding: 10px 0; /* Adjust padding */
+        margin-top: 15px; /* Space from nav links */
+        border-top: 1px solid var(--border); /* Separator */
+    }
+
+    .nav-actions button,
+    .nav-actions a {
+        width: 100%; /* Full width buttons */
+        justify-content: flex-start; /* Align icons and text to start */
+        padding: 10px 20px; /* Consistent padding */
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-bar { /* Assuming this is for other pages, keeping it */
+        flex-direction: column;
+    }
+
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+
+    th, td { /* Assuming this is for other pages, keeping it */
+        padding: 10px;
+    }
+}
+
+@media (min-width: 769px) { /* Styles for larger screens */
+    .header-container {
+        display: flex; /* Show on larger screens */
+        flex-direction: row;
+        position: static; /* Reset position */
+        background: none; /* Reset background */
+        box-shadow: none; /* Reset shadow */
+        padding: 0; /* Reset padding */
+        width: auto; /* Reset width */
+        max-height: none; /* Remove max-height */
+        overflow-y: visible; /* Remove scrolling */
+    }
+
+    .nav-container {
+        display: flex; /* Show nav links on larger screens */
+        flex-direction: row;
+        background: none; /* Reset background */
+        padding: 0; /* Reset padding */
+    }
+
+    .nav-links {
+        flex-direction: row;
+        gap: 5px;
+    }
+
+    .nav-links li {
+        padding: 0;
+    }
+
+    .nav-links li a {
+        padding: 8px 12px;
+    }
+
+    .nav-actions {
+        flex-direction: row;
+        padding: 0;
+        margin-top: 0;
+        border-top: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .title h1 {
+        font-size: 1.5rem;
+    }
+
+    .title p {
+        font-size: 0.8rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .stat-card .stat-value {
+        font-size: 1.8rem;
+    }
+}
+
+/* Dark Mode Specific Styles */
+.dark-mode .nav-container {
+    background: rgba(31, 42, 60, 0.7);
+}
+
+.dark-mode .card,
+.dark-mode .chart-container {
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .title h1,
+.dark-mode .title p,
+.dark-mode .section-header h2,
+.dark-mode .section-header p,
+.dark-mode .stat-card .stat-label,
+.dark-mode .stat-card .stat-value,
+.dark-mode .chart-header h3,
+.dark-mode .nav-links a,
+.dark-mode .export-button,
+.dark-mode .dropdown-menu button {
+    color: var(--text);
+}
+
+.dark-mode .export-button {
+    background-color: var(--card-bg);
+    border-color: var(--border);
+}
+
+.dark-mode .dropdown-menu {
+    background-color: var(--card-bg);
+    border-color: var(--border);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+.dark-mode .dropdown-menu button:hover {
+    background-color: rgba(86, 119, 252, 0.2);
+}
+
+/* Records Page Specific Styles (Keeping these as they were in the original style.css) */
+.filter-bar {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+}
+
+.filter-bar input, .filter-bar select {
+    padding: 10px 15px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background-color: var(--bg);
+    color: var(--text);
+    flex: 1;
+    min-width: 200px;
+    transition: var(--transition);
+}
+
+.filter-bar input:focus, .filter-bar select:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.2);
+}
+
+.filter-bar button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-bar button:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.table-container {
+    background: var(--card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+thead {
+    background-color: var(--primary);
+    color: white;
+}
+
+th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+}
+
+th.sortable::after {
+    content: "↕";
+    margin-left: 5px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+th.sorted-asc::after {
+    content: "↑";
+}
+
+th.sorted-desc::after {
+    content: "↓";
+}
+
+tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+tbody tr:hover {
+    background-color: rgba(63, 81, 181, 0.05);
+}
+
+td {
+    padding: 12px 15px;
+    color: var(--text);
+}
+
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.status-completed {
+    background-color: rgba(76, 175, 80, 0.15);
+    color: var(--positive);
+}
+
+.status-pending {
+    background-color: rgba(255, 152, 0, 0.15);
+    color: var(--warning);
+}
+
+.status-overdue {
+    background-color: rgba(244, 67, 54, 0.15);
+    color: var(--danger);
+}
+
+.action-button {
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.view-details {
+    background-color: var(--primary);
+    color: white;
+}
+
+.view-details:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    gap: 10px;
+}
+
+.pagination button {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 36px;
+    height: 36px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.pagination button.active,
+.pagination button:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* Modal Styles (Keeping these as they were in the original style.css) */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    width: 90%;
+    max-width: 800px;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    padding: 20px;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.close-modal:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.detail-card {
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.detail-card h4 {
+    margin-bottom: 10px;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.detail-card p {
+    font-size: 1.1rem;
+    color: var(--text);
+}
+
+.parts-list {
+    margin-top: 20px;
+}
+
+.parts-list h4 {
+    margin-bottom: 10px;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.parts-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.parts-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+}
+
+.parts-list li:last-child {
+    border-bottom: none;
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    background: var(--bg);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal-footer button {
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition);
+    border: none;
+}
+
+.btn-close {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.btn-close:hover {
+    background: #e0e0e0;
+}
+
+.btn-print {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-print:hover {
+    background: var(--primary-dark);
+}
+
+/* Specific styles for client portal */
+.client-info {
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: var(--shadow); /* Use existing shadow variable */
+    margin-bottom: 30px;
+    border-left: 4px solid var(--primary); /* Consistent with stat-card */
+}
+.client-info h3 {
+    color: var(--primary);
+    margin-bottom: 15px;
+}
+/* Spinner for loading indicator */
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: var(--primary);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px auto;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Dark mode adjustments for client-info and spinner */
+.dark-mode .client-info {
+    background-color: var(--card-bg);
+    box-shadow: var(--shadow);
+    border-left-color: var(--primary);
+}
+
+.dark-mode .client-info h3 {
+    color: var(--primary);
+}
+
+.dark-mode .spinner {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-left-color: var(--primary);
+}
+
+/* Specific styles for parts page - moved from inline style */
+.action-button.edit-button {
+    background-color: var(--completed-color); /* Green, consistent with status-completed */
+}
+.action-button.delete-button {
+    background-color: var(--overdue-color); /* Red, consistent with status-overdue */
+}
+.status-badge.low-stock {
+    background-color: var(--overdue-color); /* Red for low stock */
+    color: white;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 0.85em;
+    font-weight: bold;
+}
+.status-badge.in-stock {
+    background-color: var(--completed-color); /* Green for in stock */
+    color: white;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 0.85em;
+    font-weight: bold;
+}
+ /* css code added for shedule page */
+:root {
+    /* ... existing variables ... */
+    --light-bg: #EFEFEF; /* Lighter background for calendar days not in current month */
+    --pending-color: #FF9800; /* Orange for pending, consistent with --warning */
+}
+
+.dark-mode {
+    /* ... existing variables ... */
+    --light-bg: #08122c; /* Darker lighter background for calendar days */
+    --pending-color: #FFB74D; /* Dark mode orange for pending */
+}
+
+/* ... existing styles ... */
+
+/* Specific styles for calendar view */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    background-color: var(--card-bg);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+}
+.calendar-day {
+    border: 1px solid var(--border);
+    padding: 10px;
+    min-height: 100px;
+    background-color: var(--bg);
+    border-radius: 5px;
+    font-size: 0.9rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.calendar-day.header {
+    background-color: var(--primary);
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 8px;
+    border: none; /* Remove border for header */
+}
+.calendar-day.has-service {
+    background-color: rgba(63, 81, 181, 0.1); /* Light primary background */
+    border-color: var(--primary);
+}
+.calendar-day.current-month {
+    background-color: var(--bg); /* Ensure current month days have default background */
+}
+.calendar-day.other-month {
+    background-color: var(--light-bg); /* Lighter background for days not in current month */
+    color: var(--text-light); /* Lighter text for days not in current month */
+}
+.calendar-day .day-number {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--text); /* Use --text for consistency */
+}
+.calendar-day.other-month .day-number {
+    color: var(--text-light);
+}
+.service-event {
+    background-color: var(--primary);
+    color: white;
+    padding: 3px 5px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer; /* Indicate clickable */
+}
+.service-event.status-overdue { /* Changed to status-overdue for consistency */
+    background-color: var(--overdue-color); /* Red for overdue */
+}
+.service-event.status-completed { /* Changed to status-completed for consistency */
+    background-color: var(--completed-color); /* Green for completed */
+}
+.service-event.status-pending { /* Changed to status-pending for consistency */
+    background-color: var(--pending-color); /* Orange for pending */
+}
+.calendar-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: var(--card-bg);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+}
+.calendar-navigation h3 {
+    margin: 0;
+    color: var(--primary);
+    font-size: 1.5rem;
+}
+
+/* Grouping for action buttons in section header */
+.action-buttons-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: flex-end; /* Align to end for larger screens */
+}
+
+@media (max-width: 768px) {
+    .action-buttons-group {
+        justify-content: flex-start; /* Align to start for smaller screens */
+        width: 100%; /* Take full width */
+    }
+    .action-buttons-group .reports-button {
+        width: 100%; /* Full width buttons on small screens */
+    }
+}
+/* Additions for the new sectioned form */
+
+.form-navigation-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.nav-tab {
+    background-color: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+    flex-grow: 1; /* Allow tabs to grow and fill space */
+    text-align: center;
+    min-width: 120px; /* Ensure tabs don't get too small */
+}
+
+.nav-tab:hover {
+    background-color: rgba(63, 81, 181, 0.1);
+    border-color: var(--primary);
+}
+
+.nav-tab.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.form-section {
+    display: none; /* Hidden by default */
+    animation: fadeIn 0.5s ease-out; /* Optional: add a fade-in animation */
+}
+
+.form-section.active {
+    display: block; /* Show active section */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Adjust modal body padding if needed for tabs */
+.modal-body {
+    padding: 20px;
+}
+
+/* Ensure detail-grid within form-section still works */
+.form-section .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px; /* Keep margin for spacing between cards */
+}
+
+/* Adjust input/select styles within the modal for better fit */
+#addGeneratorForm label, /* Combined with #addServiceForm */
+#addServiceForm label,
+#addPartForm label,
+#addTechnicianForm label { /* NEW: Added for addTechnicianForm */
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+#addGeneratorForm input[type="text"], /* Combined with #addServiceForm */
+#addGeneratorForm input[type="email"],
+#addGeneratorForm input[type="number"],
+#addGeneratorForm input[type="date"],
+#addGeneratorForm select,
+#addGeneratorForm textarea,
+#addServiceForm input[type="text"],
+#addServiceForm input[type="email"],
+#addServiceForm input[type="number"],
+#addServiceForm input[type="date"],
+#addServiceForm input[type="time"], /* Added for schedule form */
+#addServiceForm select,
+#addServiceForm textarea,
+#addPartForm input[type="text"],
+#addPartForm input[type="email"],
+#addPartForm input[type="number"],
+#addPartForm input[type="date"],
+#addPartForm select,
+#addPartForm textarea,
+#addTechnicianForm input[type="text"], /* NEW: Added for addTechnicianForm */
+#addTechnicianForm input[type="email"],
+#addTechnicianForm input[type="number"],
+#addTechnicianForm input[type="date"],
+#addTechnicianForm select,
+#addTechnicianForm textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background-color: var(--bg);
+    color: var(--text);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+#addGeneratorForm input:focus, /* Combined with #addServiceForm */
+#addGeneratorForm select:focus,
+#addGeneratorForm textarea:focus,
+#addServiceForm input:focus,
+#addServiceForm select:focus,
+#addServiceForm textarea:focus,
+#addPartForm input:focus,
+#addPartForm select:focus,
+#addPartForm textarea:focus,
+#addTechnicianForm input:focus, /* NEW: Added for addTechnicianForm */
+#addTechnicianForm select:focus,
+#addTechnicianForm textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.2);
+}
+
+/* Dark mode adjustments for new form elements */
+.dark-mode .nav-tab {
+    background-color: var(--card-bg);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+.dark-mode .nav-tab:hover {
+    background-color: rgba(86, 119, 252, 0.2);
+    border-color: var(--primary);
+}
+
+.dark-mode .nav-tab.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.dark-mode #addGeneratorForm input, /* Combined with #addServiceForm */
+.dark-mode #addGeneratorForm select,
+.dark-mode #addGeneratorForm textarea,
+.dark-mode #addServiceForm input,
+.dark-mode #addServiceForm select,
+.dark-mode #addServiceForm textarea,
+.dark-mode #addPartForm input,
+.dark-mode #addPartForm select,
+.dark-mode #addPartForm textarea,
+.dark-mode #addTechnicianForm input, /* NEW: Added for addTechnicianForm */
+.dark-mode #addTechnicianForm select,
+.dark-mode #addTechnicianForm textarea {
+    background-color: var(--bg);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+.dark-mode #addGeneratorForm input:focus, /* Combined with #addServiceForm */
+.dark-mode #addGeneratorForm select:focus,
+.dark-mode #addGeneratorForm textarea:focus,
+.dark-mode #addServiceForm input:focus,
+.dark-mode #addServiceForm select:focus,
+.dark-mode #addServiceForm textarea:focus,
+.dark-mode #addPartForm input:focus,
+.dark-mode #addPartForm select:focus,
+.dark-mode #addPartForm textarea:focus,
+.dark-mode #addTechnicianForm input:focus, /* NEW: Added for addTechnicianForm */
+.dark-mode #addTechnicianForm select:focus,
+.dark-mode #addTechnicianForm textarea:focus {
+    box-shadow: 0 0 0 3px rgba(86, 119, 252, 0.2);
+}
+
+/* Responsive adjustments for tabs */
+@media (max-width: 600px) {
+    .form-navigation-tabs {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .nav-tab {
+        min-width: unset; /* Remove min-width for full width */
+    }
+}
+/* Admin Panel Specific Styles */
+.status-badge.role-admin {
+    background-color: rgba(156, 39, 176, 0.15); /* Purple-ish */
+    color: #9C27B0;
+}
+.status-badge.role-technician {
+    background-color: rgba(3, 169, 244, 0.15); /* Light Blue */
+    color: #03A9F4;
+}
+.status-badge.role-client {
+    background-color: rgba(255, 87, 34, 0.15); /* Deep Orange */
+    color: #FF5722;
+}
+
+/* Permissions Display in Modal */
+.permission-status {
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.permission-view {
+    background-color: rgba(76, 175, 80, 0.15); /* Green */
+    color: var(--positive);
+}
+.permission-manage {
+    background-color: rgba(63, 81, 181, 0.15); /* Primary Blue */
+    color: var(--primary);
+}
+.permission-hidden, .permission-no-access {
+    background-color: rgba(244, 67, 54, 0.15); /* Red */
+    color: var(--danger);
+}
+
+/* Dark mode adjustments for new status badges */
+.dark-mode .status-badge.role-admin {
+    background-color: rgba(186, 104, 200, 0.2);
+    color: #BA68C8;
+}
+.dark-mode .status-badge.role-technician {
+    background-color: rgba(129, 212, 250, 0.2);
+    color: #81D4FA;
+}
+.dark-mode .status-badge.role-client {
+    background-color: rgba(255, 138, 101, 0.2);
+    color: #FF8A65;
+}
+
+.dark-mode .permission-view {
+    background-color: rgba(129, 199, 132, 0.2);
+    color: var(--positive);
+}
+.dark-mode .permission-manage {
+    background-color: rgba(86, 119, 252, 0.2);
+    color: var(--primary);
+}
+.dark-mode .permission-hidden, .dark-mode .permission-no-access {
+    background-color: rgba(229, 115, 115, 0.2);
+    color: var(--danger);
+}
