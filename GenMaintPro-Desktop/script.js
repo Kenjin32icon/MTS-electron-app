@@ -462,15 +462,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             } else {
                 if (signInUpModal) signInUpModal.style.display = 'block';
-                const loginTabButton = document.querySelector('.tab-button[data-tab="login"]');
+                // MODIFIED: Automatically switch to the signup tab when the modal opens for unauthenticated users
                 const signupTabButton = document.querySelector('.tab-button[data-tab="signup"]');
-                const loginTabContent = document.getElementById('loginTab');
-                const signupTabContent = document.getElementById('signupTab');
-
-                if (loginTabButton) loginTabButton.classList.add('active');
-                if (signupTabButton) signupTabButton.classList.remove('active');
-                if (loginTabContent) loginTabContent.classList.add('active');
-                if (signupTabContent) signupTabContent.classList.remove('active');
+                if (signupTabButton) {
+                    signupTabButton.click(); // Programmatically click the signup tab
+                } else {
+                    // Fallback to login tab if signup tab not found (shouldn't happen if HTML is correct)
+                    const loginTabButton = document.querySelector('.tab-button[data-tab="login"]');
+                    if (loginTabButton) loginTabButton.click();
+                }
             }
         });
     }
@@ -519,7 +519,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Ensure signup form is enabled and visible
     if (signupForm) {
+        signupForm.removeAttribute('disabled');
+        signupForm.style.display = '';
         signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const nameInput = document.getElementById('signupName');
