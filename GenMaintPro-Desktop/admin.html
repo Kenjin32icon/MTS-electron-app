@@ -1,3 +1,4 @@
+<!-- FileName: /admin.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,23 +18,23 @@
                 <p>Generator Maintenance System</p>
             </div>
         </div>
-        <button class="menu-button" aria-label="Menu" aria-expanded="false">
+        <!-- <button class="menu-button" aria-label="Menu" aria-expanded="false">
             <span class="menu-icon">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
             </span>
             <span class="menu-text">Menu</span>
-        </button>       
+        </button> -->
         <div class="header-container">
             <div class="nav-container" id="main-nav">
                 <ul class="nav-links" role="menu">
-                    <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="registry.html"><i class="fas fa-list"></i> Registry</a></li>
-                    <li><a href="schedule.html"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
-                    <li><a href="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
-                    <li><a href="parts.html"><i class="fas fa-cogs"></i> Parts</a></li>
-                    <li><a href="team.html"><i class="fas fa-users"></i> Team</a></li>
+                    <li><a href="#" data-page="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#" data-page="registry.html"><i class="fas fa-list"></i> Registry</a></li>
+                    <li><a href="#" data-page="schedule.html"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
+                    <li><a href="#" data-page="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
+                    <li><a href="#" data-page="parts.html"><i class="fas fa-cogs"></i> Parts</a></li>
+                    <li><a href="#" data-page="team.html"><i class="fas fa-users"></i> Team</a></li>
                 </ul>
             </div>
             <div class="nav-actions">
@@ -41,74 +42,93 @@
                     <i class="fas fa-moon" id="darkModeIcon"></i>
                     <span id="darkModeText">Light Mode</span>
                 </button>
-                <a href="reports.html" class="reports-button"><i class="fas fa-chart-bar"></i> Reports</a>
-                <a href="signin.html" class="signing-button"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-                <a href="clientportal.html" class="client-button"><i class="fas fa-user-circle"></i> Client Portal</a>
-                <a href="admin.html" class="client-button"><i class="fas fa-user-shield"></i> Admin Panel</a>
+                <a href="#" data-page="reports.html" class="reports-button"><i class="fas fa-chart-bar"></i> Reports</a>
+                <!-- Dynamic Sign In/Out Button -->
+                <a href="#" class="signing-button" id="authButton"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+                <!-- Client Portal Link (conditionally visible) -->
+                <a href="#" data-page="clientportal.html" class="client-button" id="clientPortalLink"><i class="fas fa-user-circle"></i> Client Portal</a>
+                <!-- Admin Panel Link (conditionally visible) -->
+                <a href="#" data-page="admin.html" class="client-button active" id="adminPanelLink"><i class="fas fa-user-shield"></i> Admin Panel</a>
             </div>
         </div>
     </nav>
 </header>
 
 <main>
-    <section class="admin-panel-section service-records" aria-labelledby="admin-heading">
+    <section class="admin-panel-section" aria-labelledby="admin-heading">
         <div class="section-header">
             <div>
                 <h2 id="admin-heading"><i class="fas fa-user-shield"></i> Admin Panel</h2>
-                <p>Manage users, roles, and system settings.</p>
+                <p>Manage system users, data, and configurations.</p>
             </div>
-            <button class="reports-button" id="addNewUserBtn"><i class="fas fa-user-plus"></i> Add New User</button>
+            <div class="export">
+                <button class="reports-button" id="resetDatabaseBtn"><i class="fas fa-database"></i> Reset Database</button>
+                <button class="reports-button" id="loadSampleDataBtn"><i class="fas fa-file-import"></i> Load Sample Data</button>
+                <button class="reports-button" id="exportAllDataBtn"><i class="fas fa-file-export"></i> Export All Data</button>
+            </div>
         </div>
 
-        <div class="stats-container">
-            <div class="stat-card completed">
+        <!-- Admin Dashboard Stats -->
+        <div class="stats-container" id="adminStatsContainer">
+            <div class="stat-card total-users" role="region" aria-labelledby="total-users-heading">
                 <div class="stat-label"><i class="fas fa-users"></i> Total Users</div>
-                <div class="stat-value" id="totalUsersCount">42</div>
-                <div class="stat-trend"><i class="fas fa-arrow-up"></i> +3 this month</div>
+                <div class="stat-value" id="totalUsers">0</div>
+                <div class="stat-trend" id="totalUsersTrend">N/A</div>
             </div>
-            <div class="stat-card pending">
-                <div class="stat-label"><i class="fas fa-user-tag"></i> Admins</div>
-                <div class="stat-value" id="adminUsersCount">5</div>
-                <div class="stat-trend">2 full access, 3 limited</div>
+            <div class="stat-card admin-users" role="region" aria-labelledby="admin-users-heading">
+                <div class="stat-label"><i class="fas fa-user-shield"></i> Admin Users</div>
+                <div class="stat-value" id="adminUsers">0</div>
+                <div class="stat-trend" id="adminUsersTrend">N/A</div>
             </div>
-            <div class="stat-card overdue">
-                <div class="stat-label"><i class="fas fa-user-cog"></i> Technicians</div>
-                <div class="stat-value" id="techUsersCount">12</div>
-                <div class="stat-trend">8 active, 4 inactive</div>
+            <div class="stat-card tech-users" role="region" aria-labelledby="tech-users-heading">
+                <div class="stat-label"><i class="fas fa-hard-hat"></i> Technician Users</div>
+                <div class="stat-value" id="technicianUsers">0</div>
+                <div class="stat-trend" id="technicianUsersTrend">N/A</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-label"><i class="fas fa-user-circle"></i> Clients</div>
-                <div class="stat-value" id="clientUsersCount">25</div>
-                <div class="stat-trend">15 premium, 10 standard</div>
+            <div class="stat-card client-users" role="region" aria-labelledby="client-users-heading">
+                <div class="stat-label"><i class="fas fa-user-tie"></i> Client Users</div>
+                <div class="stat-value" id="clientUsers">0</div>
+                <div class="stat-trend" id="clientUsersTrend">N/A</div>
             </div>
         </div>
 
+        <!-- User Role Distribution Chart -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>User Role Distribution</h3>
+            </div>
+            <canvas id="userRoleChart"></canvas>
+        </div>
+
+        <!-- User Management Section -->
+        <div class="section-header">
+            <h3><i class="fas fa-user-cog"></i> User Management</h3>
+            <button class="reports-button" id="addUserBtn"><i class="fas fa-plus"></i> Add New User</button>
+        </div>
         <div class="filter-bar">
-            <input type="text" placeholder="Search by Name, Email..." id="userSearch">
+            <input type="text" placeholder="Search users by name or email..." id="userSearch">
             <select id="userRoleFilter">
                 <option value="">All Roles</option>
                 <option value="admin">Admin</option>
                 <option value="technician">Technician</option>
                 <option value="client">Client</option>
             </select>
-            <select id="userStatusFilter">
-                <option value="">All Statuses</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-            </select>
             <button id="applyUserFilters"><i class="fas fa-filter"></i> Apply Filters</button>
             <button id="resetUserFilters"><i class="fas fa-redo"></i> Reset</button>
         </div>
-
         <div class="table-container">
-            <table id="userManagementTable">
+            <div id="user-loading-indicator" style="text-align: center; padding: 2rem;">
+                <div class="spinner"></div>
+                <p>Loading user data...</p>
+            </div>
+            <table id="usersTable" style="display: none;">
                 <thead>
                     <tr>
                         <th class="sortable" data-sort="name">Name</th>
                         <th class="sortable" data-sort="email">Email</th>
                         <th class="sortable" data-sort="role">Role</th>
-                        <th class="sortable" data-sort="lastLogin">Last Active</th>
                         <th class="sortable" data-sort="status">Status</th>
+                        <th>Permissions</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -117,136 +137,262 @@
                 </tbody>
             </table>
         </div>
-
         <div class="pagination">
-            <button><i class="fas fa-chevron-left"></i></button>
-            <button class="active">1</button>
-            <button>2</button>
-            <button>3</button>
-            <button><i class="fas fa-chevron-right"></i></button>
+            <button id="userPrevPage"><i class="fas fa-chevron-left"></i></button>
+            <div id="userPageNumbers">
+                <!-- Page numbers will be populated by JavaScript -->
+            </div>
+            <button id="userNextPage"><i class="fas fa-chevron-right"></i></button>
         </div>
+
+        <!-- User Action Logs Section -->
+        <div class="section-header">
+            <h3><i class="fas fa-history"></i> User Action Logs</h3>
+            <button class="reports-button" id="exportUserActionsBtn"><i class="fas fa-file-export"></i> Export Logs</button>
+        </div>
+        <div class="filter-bar">
+            <input type="text" placeholder="Search by user or action type..." id="actionLogSearch">
+            <input type="date" id="actionLogDateFrom">
+            <input type="date" id="actionLogDateTo">
+            <button id="applyActionLogFilters"><i class="fas fa-filter"></i> Apply Filters</button>
+            <button id="resetActionLogFilters"><i class="fas fa-redo"></i> Reset</button>
+        </div>
+        <div class="table-container">
+            <div id="action-loading-indicator" style="text-align: center; padding: 2rem;">
+                <div class="spinner"></div>
+                <p>Loading action logs...</p>
+            </div>
+            <table id="userActionsTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-sort="timestamp">Timestamp</th>
+                        <th class="sortable" data-sort="user_name">User</th>
+                        <th class="sortable" data-sort="action_type">Action Type</th>
+                        <th class="sortable" data-sort="action_details">Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- User action logs will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination">
+            <button id="actionPrevPage"><i class="fas fa-chevron-left"></i></button>
+            <div id="actionPageNumbers">
+                <!-- Page numbers will be populated by JavaScript -->
+            </div>
+            <button id="actionNextPage"><i class="fas fa-chevron-right"></i></button>
+        </div>
+
     </section>
 </main>
 
-<!-- Edit User Role Modal -->
-<div class="modal" id="editUserRoleModal">
+<!-- Modals (reused from other pages or new ones) -->
+
+<!-- Add/Edit User Modal -->
+<div class="modal" id="userModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Edit User Role & Permissions</h3>
+            <h3 id="userModalTitle">Add New User</h3>
             <button class="close-modal">&times;</button>
         </div>
         <div class="modal-body">
-            <form id="editUserRoleForm">
-                <div class="detail-card">
-                    <h4>User Information</h4>
-                    <p><strong>Name:</strong> <span id="modalUserName" data-key="name"></span></p>
-                    <p><strong>Email:</strong> <span id="modalUserEmail" data-key="email"></span></p>
-                    <p><strong>User ID:</strong> <span id="modalUserId" data-key="id"></span></p>
-                </div>
+            <form id="userForm">
+                <input type="hidden" id="userId">
+                <label for="userName">Full Name:</label>
+                <input type="text" id="userName" name="name" required>
+                <label for="userEmail">Email:</label>
+                <input type="email" id="userEmail" name="email" required>
+                <label for="userPassword">Password (leave blank to keep current):</label>
+                <input type="password" id="userPassword" name="password" minlength="6">
+                <label for="userRole">Role:</label>
+                <select id="userRole" name="role" required>
+                    <option value="client">Client</option>
+                    <option value="technician">Technician</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <label for="userStatus">Status:</label>
+                <select id="userStatus" name="status" required>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
 
-                <div class="detail-card">
-                    <h4>Assign Role</h4>
-                    <label for="editUserRole">Role:</label>
-                    <select id="editUserRole" name="role" required data-key="role">
-                        <option value="client">Client</option>
-                        <option value="technician">Technician</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-
-                <div class="detail-card">
-                    <h4>Set Permissions</h4>
-                    <div class="permissions-grid" id="permissionsDisplay">
-                        <div class="permission-item">
-                            <input type="checkbox" id="permDashboard" checked disabled>
-                            <label for="permDashboard">Dashboard Access</label>
-                        </div>
-                        <div class="permission-item">
-                            <input type="checkbox" id="permReports">
-                            <label for="permReports">Reports Access</label>
-                        </div>
-                        <div class="permission-item">
-                            <input type="checkbox" id="permAdmin">
-                            <label for="permAdmin">Admin Privileges</label>
-                        </div>
-                        <div class="permission-item">
-                            <input type="checkbox" id="permClientPortal" checked>
-                            <label for="permClientPortal">Client Portal</label>
-                        </div>
+                <h4>Permissions:</h4>
+                <div class="permissions-grid">
+                    <div class="permission-item">
+                        <input type="checkbox" id="permDashboard" name="permDashboard">
+                        <label for="permDashboard">Dashboard Access</label>
+                    </div>
+                    <div class="permission-item">
+                        <input type="checkbox" id="permReports" name="permReports">
+                        <label for="permReports">Reports Access</label>
+                    </div>
+                    <div class="permission-item">
+                        <input type="checkbox" id="permAdmin" name="permAdmin">
+                        <label for="permAdmin">Admin Panel Access</label>
+                    </div>
+                    <div class="permission-item">
+                        <input type="checkbox" id="permClientPortal" name="permClientPortal">
+                        <label for="permClientPortal">Client Portal Access</label>
+                    </div>
+                    <div class="permission-item">
+                        <input type="checkbox" id="permRegistryModify" name="permRegistryModify">
+                        <label for="permRegistryModify">Registry Modify</label>
+                    </div>
+                    <div class="permission-item">
+                        <input type="checkbox" id="permPartsModify" name="permPartsModify">
+                        <label for="permPartsModify">Parts Modify</label>
+                    </div>
+                    <div class="permission-item">
+                        <input type="checkbox" id="permScheduleModify" name="permScheduleModify">
+                        <label for="permScheduleModify">Schedule Modify</label>
+                    </div>
+                    <div class="permission-item">
+                        <input type="checkbox" id="permRecordsModify" name="permRecordsModify">
+                        <label for="permRecordsModify">Records Modify</label>
+                    </div>
+                    <div class="permission-item">
+                        <input type="checkbox" id="permTeamModify" name="permTeamModify">
+                        <label for="permTeamModify">Team Modify</label>
+                    </div>
+                    <div class="permission-item">
+                        <input type="checkbox" id="permImportData" name="permImportData">
+                        <label for="permImportData">Import Data</label>
+                    </div>
+                    <div class="permission-item">
+                        <input type="checkbox" id="permExportData" name="permExportData">
+                        <label for="permExportData">Export Data</label>
                     </div>
                 </div>
-
-                <div class="detail-card">
-                    <h4>Access Status</h4>
-                    <label for="userAccessStatus">Account Status:</label>
-                    <select id="userAccessStatus" name="status" data-key="status">
-                        <option value="active">Active</option>
-                        <option value="limited">Limited Access</option>
-                        <option value="suspended">Suspended</option>
-                    </select>
-                </div>
             </form>
         </div>
         <div class="modal-footer">
             <button class="btn-close">Cancel</button>
-            <button class="btn-delete">Disable Account</button>
-            <button class="reports-button" type="submit" form="editUserRoleForm"><i class="fas fa-save"></i> Save Changes</button>
+            <button class="btn-save" type="submit" form="userForm">Save User</button>
         </div>
     </div>
 </div>
 
-<!-- Add New User Modal (similar to Add Technician Modal) -->
-<div class="modal" id="addNewUserModal">
+<!-- Reset Database Confirmation Modal -->
+<div class="modal" id="resetDbConfirmModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Add New User</h3>
+            <h3>Confirm Database Reset</h3>
             <button class="close-modal">&times;</button>
         </div>
         <div class="modal-body">
-            <form id="addNewUserForm">
-                <div class="detail-card">
-                    <h4>User Information</h4>
-                    <label for="newUserName">Full Name:</label>
-                    <input type="text" id="newUserName" name="name" required>
-
-                    <label for="newUserEmail">Email:</label>
-                    <input type="email" id="newUserEmail" name="email" required>
-
-                    <label for="newUserPassword">Password:</label>
-                    <input type="password" id="newUserPassword" name="password" required minlength="6">
-
-                    <label for="newUserRole">Role:</label>
-                    <select id="newUserRole" name="role" required>
-                        <option value="client">Client</option>
-                        <option value="technician">Technician</option>
-                        <option value="admin">Admin</option>
-                    </select>
-
-                    <label for="newUserStatus">Status:</label>
-                    <select id="newUserStatus" name="status" required>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
-                </div>
+            <p><strong>WARNING:</strong> This action will delete ALL existing data and re-initialize the database with only the default admin account. This cannot be undone.</p>
+            <p>Please enter your admin credentials to confirm:</p>
+            <form id="resetDbForm">
+                <label for="resetAdminEmail">Admin Email:</label>
+                <input type="email" id="resetAdminEmail" required>
+                <label for="resetAdminPassword">Admin Password:</label>
+                <input type="password" id="resetAdminPassword" required>
             </form>
         </div>
         <div class="modal-footer">
             <button class="btn-close">Cancel</button>
-            <button class="reports-button" type="submit" form="addNewUserForm"><i class="fas fa-user-plus"></i> Add User</button>
+            <button class="btn-save" type="submit" form="resetDbForm">Confirm Reset</button>
         </div>
     </div>
 </div>
 
+<!-- Load Sample Data Confirmation Modal -->
+<div class="modal" id="loadSampleDataConfirmModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Confirm Load Sample Data</h3>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>This action will add sample data to the existing database. Existing data will NOT be deleted, but new sample entries will be added.</p>
+            <p>Please enter your admin credentials to confirm:</p>
+            <form id="loadSampleDataForm">
+                <label for="loadAdminEmail">Admin Email:</label>
+                <input type="email" id="loadAdminEmail" required>
+                <label for="loadAdminPassword">Admin Password:</label>
+                <input type="password" id="loadAdminPassword" required>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-close">Cancel</button>
+            <button class="btn-save" type="submit" form="loadSampleDataForm">Confirm Load</button>
+        </div>
+    </div>
+</div>
+
+<!-- Sign In/Up Modal (reused) -->
+<div class="modal" id="signInUpModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Sign In / Sign Up</h3>
+            <button class="close-modal" id="closeSignInUpModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="tab-buttons">
+                <button class="tab-button active" data-tab="login">Login</button>
+                <button class="tab-button" data-tab="signup">Sign Up</button>
+            </div>
+
+            <div id="loginTab" class="tab-content active">
+                <form id="loginForm">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                    <button type="submit" class="reports-button">Login</button>
+                </form>
+            </div>
+
+            <div id="signupTab" class="tab-content">
+                <form id="signupForm">
+                    <label for="signupName">Full Name:</label>
+                    <input type="text" id="signupName" name="name" required>
+                    <label for="signupEmail">Email:</label>
+                    <input type="email" id="signupEmail" name="email" required>
+                    <label for="signupPassword">Password:</label>
+                    <input type="password" id="signupPassword" name="password" required minlength="6">
+                    <label for="signupRole">Role:</label>
+                    <select id="signupRole" name="role" required>
+                        <option value="client">Client</option>
+                        <option value="technician">Technician</option>
+                        <!-- Admin option removed for direct sign-up -->
+                    </select>
+                    <button type="submit" class="reports-button">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- First Login Password Change Modal -->
+<div class="modal" id="firstLoginModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Change Default Password</h3>
+            <button class="close-modal" id="closeFirstLoginModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>It looks like this is your first time logging in with the default admin account. For security, please change your password and update your details.</p>
+            <form id="firstLoginForm">
+                <div class="detail-card">
+                    <label for="newAdminName">Full Name:</label>
+                    <input type="text" id="newAdminName" name="newName" required>
+                    <label for="newAdminEmail">Email:</label>
+                    <input type="email" id="newAdminEmail" name="newEmail" required>
+                    <label for="newAdminPassword">New Password:</label>
+                    <input type="password" id="newAdminPassword" name="newPassword" required minlength="6">
+                    <label for="confirmAdminPassword">Confirm New Password:</label>
+                    <input type="password" id="confirmAdminPassword" name="confirmPassword" required minlength="6">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="reports-button" type="submit" form="firstLoginForm"><i class="fas fa-save"></i> Set New Password</button>
+        </div>
+    </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="module" src="script.js"></script>
-<script>
-//Connect page-specific data
-// In admin.html's script
-document.addEventListener('DOMContentLoaded', async () => {
-  const users = await api.get('users');
-  renderUsersTable(users);
-});
-
-</script>
 </body>
 </html>

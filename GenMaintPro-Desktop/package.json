@@ -1,18 +1,21 @@
 {
   "name": "genmaintpro-desktop",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Offline Generator Maintenance System",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
-    "bcrypt": "^6.0.0",
-    "electron": "^37.2.6",
-    "fs-extra": "^11.3.1",
+    "electron": "^28.3.3",
+    "electron-rebuild": "^3.2.9"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "fs-extra": "^11.3.0",
     "sqlite3": "^5.1.7",
     "uuid": "^11.1.0"
   }

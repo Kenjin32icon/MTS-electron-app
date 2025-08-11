@@ -17,36 +17,38 @@
                 <p>Generator Maintenance System</p>
             </div>
         </div>
-        <button class="menu-button" aria-label="Menu" aria-expanded="false">
+        <!-- <button class="menu-button" aria-label="Menu" aria-expanded="false">
             <span class="menu-icon">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
             </span>
-            <span class="menu-text">Menu</span>
-        </button>       
+            <span class="menu-text">Menu</span> -->
+        </button>
         <div class="header-container">
             <div class="nav-container" id="main-nav">
-                <ul class="nav-links" role="menu">
-                    <li><a href="index.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="registry.html"><i class="fas fa-list"></i> Registry</a></li>
-                    <li><a href="schedule.html"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
-                    <li><a href="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
-                    <li><a href="parts.html"><i class="fas fa-cogs"></i> Parts</a></li>
-                    <li><a href="team.html"><i class="fas fa-users"></i> Team</a></li>
-                </ul>
+                 <ul class="nav-links" role="menu">
+            <li><a href="#" data-page="index.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li class="protected-link" data-permission="permRegistryModify"><a href="#" data-page="registry.html"><i class="fas fa-list"></i> Registry</a></li>
+            <li class="protected-link" data-permission="permScheduleModify"><a href="#" data-page="schedule.html"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
+            <li class="protected-link" data-permission="permRecordsModify"><a href="#" data-page="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
+            <li class="protected-link" data-permission="permPartsModify"><a href="#" data-page="parts.html"><i class="fas fa-cogs"></i> Parts</a></li>
+            <li class="protected-link" data-permission="permTeamModify"><a href="#" data-page="team.html"><i class="fas fa-users"></i> Team</a></li>
+        </ul>
             </div>
             <div class="nav-actions">
                 <button class="toggle-button" id="darkModeToggle">
                     <i class="fas fa-moon" id="darkModeIcon"></i>
                     <span id="darkModeText">Light Mode</span>
                 </button>
-                <a href="reports.html" class="reports-button"><i class="fas fa-chart-bar"></i> Reports</a>
-                <a href="signin.html" class="signing-button"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-                <a href="clientportal.html" class="client-button"><i class="fas fa-user-circle"></i> Client Portal</a>
-                <a href="admin.html" class="client-button"><i class="fas fa-user-shield"></i> Admin Panel</a>
-
-            </div>
+                 <a href="#" data-page="reports.html" class="reports-button protected-link" data-permission="permReports"><i class="fas fa-chart-bar"></i> Reports</a>
+        <!-- Dynamic Sign In/Out Button -->
+        <a href="#" class="protected-link" id="authButton"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+        <!-- Client Portal Link (conditionally visible) -->
+        <a href="#" data-page="clientportal.html" class="client-button protected-link" id="clientPortalLink" data-permission="permClientPortal"><i class="fas fa-user-circle"></i> Client Portal</a>
+        <!-- Admin Panel Link (conditionally visible) -->
+        <a href="#" data-page="admin.html" class="client-button protected-link" id="adminPanelLink" data-permission="permAdmin"><i class="fas fa-user-shield"></i> Admin Panel</a>
+    </div>
         </div>
     </nav>
 </header>
@@ -62,36 +64,37 @@
                 <div class="dropdown">
                     <button class="dropdown-toggle reports-button">Year to Date <i class="fas fa-chevron-down"></i></button>
                     <div class="dropdown-menu">
-                        <button>Last 7 Days</button>
-                        <button>Last 30 Days</button>
-                        <button>Quarter to Date</button>
-                        <button>Custom Range</button>
+                        <button id="filterLast7Days">Last 7 Days</button>
+                        <button id="filterLast30Days">Last 30 Days</button>
+                        <button id="filterQuarterToDate">Quarter to Date</button>
+                        <button id="filterCustomRange">Custom Range</button>
                     </div>
                 </div>
-                <button class="reports-button"><i class="fas fa-file-export"></i> Export Report</button>
+                <button class="reports-button export-report-btn" id="exportDashboardReport"><i class="fas fa-file-export"></i> Export Report</button>
             </div>
         </div>
 
-        <div class="stats-container">
+        <div class="stats-container" id="dashboardStatsContainer">
+            <!-- Stats will be loaded here by JavaScript -->
             <div class="stat-card completed" role="region" aria-labelledby="services-heading">
                 <div class="stat-label"><i class="fas fa-check-circle"></i> Total Services YTD</div>
-                <div class="stat-value" aria-label="152 services">152</div>
-                <div class="stat-trend positive">↑ 12% vs last year</div>
+                <div class="stat-value" id="totalServicesYTD" aria-label="0 services">0</div>
+                <div class="stat-trend" id="totalServicesTrend">N/A</div>
             </div>
             <div class="stat-card" role="region" aria-labelledby="cost-heading">
                 <div class="stat-label"><i class="fas fa-dollar-sign"></i> Total Cost YTD</div>
-                <div class="stat-value" aria-label="69,400 dollars">$69,400</div>
-                <div class="stat-trend negative">↓ 8% vs last year</div>
+                <div class="stat-value" id="totalCostYTD" aria-label="0 dollars">0</div>
+                <div class="stat-trend" id="totalCostTrend">N/A</div>
             </div>
             <div class="stat-card" role="region" aria-labelledby="response-heading">
                 <div class="stat-label"><i class="fas fa-clock"></i> Avg Response Time</div>
-                <div class="stat-value" aria-label="2.4 hours">2.4 hrs</div>
-                <div class="stat-trend negative">↓ 15% improvement</div>
+                <div class="stat-value" id="avgResponseTime" aria-label="N/A hours">N/A</div>
+                <div class="stat-trend" id="avgResponseTimeTrend">N/A</div>
             </div>
             <div class="stat-card overdue" role="region" aria-labelledby="overdue-heading">
                 <div class="stat-label"><i class="fas fa-exclamation-triangle"></i> Overdue Services</div>
-                <div class="stat-value" aria-label="3 overdue">3</div>
-                <div class="stat-trend negative">↓ 40% vs last month</div>
+                <div class="stat-value" id="overdueServices" aria-label="0 overdue">0</div>
+                <div class="stat-trend" id="overdueServicesTrend">N/A</div>
             </div>
         </div>
 
@@ -99,14 +102,87 @@
             <div class="chart-header">
                 <h3 id="chart-heading">Service Volume Trend</h3>
                 <div class="chart-legend">
-                    <span class="legend-item"><span class="color current"></span> 2024</span>
-                    <span class="legend-item"><span class="color previous"></span> 2023</span>
+                    <span class="legend-item"><span class="color current"></span> <span id="currentYearLabel"></span></span>
+                    <span class="legend-item"><span class="color previous"></span> <span id="previousYearLabel"></span></span>
                 </div>
             </div>
             <canvas id="serviceTrendChart" aria-label="Service volume trend chart"></canvas>
+            <div id="serviceTrendTableContainer"></div>
         </div>
     </section>
 </main>
+
+<!-- Sign In/Up Modal -->
+<div class="modal" id="signInUpModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Sign In / Sign Up</h3>
+            <button class="close-modal" id="closeSignInUpModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="tab-buttons">
+                <button class="tab-button active" data-tab="login">Login</button>
+                <button class="tab-button" data-tab="signup">Sign Up</button>
+            </div>
+
+            <div id="loginTab" class="tab-content active">
+                <form id="loginForm">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                    <button type="submit" class="reports-button">Login</button>
+                </form>
+            </div>
+
+            <div id="signupTab" class="tab-content">
+                <form id="signupForm">
+                    <label for="signupName">Full Name:</label>
+                    <input type="text" id="signupName" name="name" required>
+                    <label for="signupEmail">Email:</label>
+                    <input type="email" id="signupEmail" name="email" required>
+                    <label for="signupPassword">Password:</label>
+                    <input type="password" id="signupPassword" name="password" required minlength="6">
+                    <label for="signupRole">Role:</label>
+                    <select id="signupRole" name="role" required>
+                        <option value="client">Client</option>
+                        <option value="technician">Technician</option>
+                        <!-- Removed Admin option for direct sign-up -->
+                    </select>
+                    <button type="submit" class="reports-button">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- First Login Password Change Modal -->
+<div class="modal" id="firstLoginModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Change Default Password</h3>
+            <button class="close-modal" id="closeFirstLoginModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>It looks like this is your first time logging in with the default admin account. For security, please change your password and update your details.</p>
+            <form id="firstLoginForm">
+                <div class="detail-card">
+                    <label for="newAdminName">Full Name:</label>
+                    <input type="text" id="newAdminName" name="newName" required>
+                    <label for="newAdminEmail">Email:</label>
+                    <input type="email" id="newAdminEmail" name="newEmail" required>
+                    <label for="newAdminPassword">New Password:</label>
+                    <input type="password" id="newAdminPassword" name="newPassword" required minlength="6">
+                    <label for="confirmAdminPassword">Confirm New Password:</label>
+                    <input type="password" id="confirmAdminPassword" name="confirmPassword" required minlength="6">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="reports-button" type="submit" form="firstLoginForm"><i class="fas fa-save"></i> Set New Password</button>
+        </div>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="module" src="script.js"></script>

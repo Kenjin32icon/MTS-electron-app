@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GenMaint Pro - Reports and analytics; Service Records</title>
+    <title>GenMaint Pro - Reports</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -17,181 +17,163 @@
                 <p>Generator Maintenance System</p>
             </div>
         </div>
-        <button class="menu-button" aria-label="Menu" aria-expanded="false">
+        <!-- <button class="menu-button" aria-label="Menu" aria-expanded="false">
             <span class="menu-icon">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
             </span>
             <span class="menu-text">Menu</span>
-        </button>       
+        </button> -->
         <div class="header-container">
             <div class="nav-container" id="main-nav">
                 <ul class="nav-links" role="menu">
-                    <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="registry.html"><i class="fas fa-list"></i> Registry</a></li>
-                    <li><a href="schedule.html"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
-                    <li><a href="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
-                    <li><a href="parts.html"><i class="fas fa-cogs"></i> Parts</a></li>
-                    <li><a href="team.html"><i class="fas fa-users"></i> Team</a></li>
+                    <li><a href="#" data-page="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#" data-page="registry.html"><i class="fas fa-list"></i> Registry</a></li>
+                    <li><a href="#" data-page="schedule.html"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
+                    <li><a href="#" data-page="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
+                    <li><a href="#" data-page="parts.html"><i class="fas fa-cogs"></i> Parts</a></li>
+                    <li><a href="#" data-page="team.html"><i class="fas fa-users"></i> Team</a></li>
                 </ul>
             </div>
             <div class="nav-actions">
-                <button class="toggle-button" id="darkModeToggle">
-                    <i class="fas fa-moon" id="darkModeIcon"></i>
-                    <span id="darkModeText">Light Mode</span>
-                </button>
-                <a href="reports.html" class="reports-button active"><i class="fas fa-chart-bar"></i> Reports</a>
-                <a href="signin.html" class="signing-button"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-                <a href="clientportal.html" class="client-button"><i class="fas fa-user-circle"></i> Client Portal</a>
-            </div>
+    <button class="toggle-button" id="darkModeToggle">
+        <i class="fas fa-moon" id="darkModeIcon"></i>
+        <span id="darkModeText">Light Mode</span>
+    </button>
+    <a href="reports.html" class="reports-button"><i class="fas fa-chart-bar"></i> Reports</a>
+    <a href="signin.html" class="signing-button" id="signInButton"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+    <a href="clientportal.html" class="client-button" id="clientPortalLink"><i class="fas fa-user-circle"></i> Client Portal</a>
+    <a href="admin.html" class="client-button" id="adminPanelLink"><i class="fas fa-user-shield"></i> Admin Panel</a>
+</div>
         </div>
     </nav>
 </header>
 
 <main>
-    <section class="service-records" aria-labelledby="records-heading">
+    <section class="reports-section" aria-labelledby="reports-heading">
         <div class="section-header">
             <div>
-                <h2 id="records-heading"><i class="fas fa-clipboard-list"></i> Service Records</h2>
-                <p>Browse and search through all past maintenance activities</p>
+                <h2 id="reports-heading"><i class="fas fa-chart-bar"></i> Comprehensive Reports</h2>
+                <p>Generate and export detailed insights into your operations.</p>
             </div>
-            <button class="reports-button"><i class="fas fa-file-export"></i> Export Records</button>
+            <button class="reports-button" id="exportAllReports"><i class="fas fa-file-export"></i> Export All Reports</button>
         </div>
-        
-        <div class="stats-container">
-            <div class="stat-card completed">
-                <div class="stat-label"><i class="fas fa-check-circle"></i> Completed Services</div>
-                <div class="stat-value">142</div>
-                <div class="stat-trend">↑ 12% from last month</div>
+
+        <div class="stats-container" id="reportsStatsContainer">
+            <div class="stat-card revenue" role="region" aria-labelledby="total-revenue-heading">
+                <div class="stat-label"><i class="fas fa-money-bill-wave"></i> Total Revenue (Completed Services)</div>
+                <div class="stat-value" id="totalRevenue">0</div>
+                <div class="stat-trend" id="totalRevenueTrend">N/A</div>
             </div>
-            <div class="stat-card pending">
-                <div class="stat-label"><i class="fas fa-clock"></i> Pending Services</div>
-                <div class="stat-value">8</div>
-                <div class="stat-trend">↓ 3 from last week</div>
+            <div class="stat-card" role="region" aria-labelledby="most-used-part-heading">
+                <div class="stat-label"><i class="fas fa-wrench"></i> Most Used Part</div>
+                <div class="stat-value" id="mostUsedPart">N/A</div>
+                <div class="stat-trend"></div>
             </div>
-            <div class="stat-card overdue">
-                <div class="stat-label"><i class="fas fa-exclamation-triangle"></i> Overdue Services</div>
-                <div class="stat-value">3</div>
-                <div class="stat-trend">↓ 40% from last month</div>
+            <div class="stat-card active-techs" role="region" aria-labelledby="top-technician-heading">
+                <div class="stat-label"><i class="fas fa-star"></i> Top Performing Technician</div>
+                <div class="stat-value" id="topPerformingTechnician">N/A</div>
+                <div class="stat-trend"></div>
             </div>
-            <div class="stat-card">
-                <div class="stat-label"><i class="fas fa-user-cog"></i> Active Technicians</div>
-                <div class="stat-value">12</div>
-                <div class="stat-trend">↑ 2 new this month</div>
+            <div class="stat-card completion-rate" role="region" aria-labelledby="completion-rate-heading">
+                <div class="stat-label"><i class="fas fa-percent"></i> Service Completion Rate</div>
+                <div class="stat-value" id="serviceCompletionRate">N/A</div>
+                <div class="stat-trend" id="serviceCompletionRateTrend">N/A</div>
             </div>
         </div>
 
-        <div class="filter-bar">
-            <input type="text" placeholder="Search by Generator, Technician..." id="recordSearch">
-            <select id="recordStatusFilter">
-                <option value="">All Statuses</option>
-                <option value="completed">Completed</option>
-                <option value="pending">Pending</option>
-                <option value="overdue">Overdue</option>
-            </select>
-            <select id="recordTechnicianFilter">
-                <option value="">All Technicians</option>
-                <option value="John Doe">John Doe</option>
-                <option value="Jane Smith">Jane Smith</option>
-                <option value="Robert Johnson">Robert Johnson</option>
-                <option value="Emily Davis">Emily Davis</option>
-                <option value="Michael Brown">Michael Brown</option>
-            </select>
-            <input type="date" id="recordDateFrom" placeholder="From Date">
-            <input type="date" id="recordDateTo" placeholder="To Date">
-            <button id="applyRecordsFilters"><i class="fas fa-filter"></i> Apply Filters</button>
-            <button id="resetRecordsFilters"><i class="fas fa-redo"></i> Reset</button>
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Service Cost Distribution by Type</h3>
+            </div>
+            <canvas id="serviceCostByTypeChart"></canvas>
         </div>
 
-        <div class="table-container">
-            <table id="recordsTable">
-                <thead>
-                    <tr>
-                        <th class="sortable" data-sort="id">Service ID</th>
-                        <th class="sortable" data-sort="generator">Generator</th>
-                        <th class="sortable" data-sort="date">Service Date</th>
-                        <th class="sortable" data-sort="next">Next Service</th>
-                        <th class="sortable" data-sort="tech">Technician</th>
-                        <th class="sortable" data-sort="status">Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Data will be populated by JavaScript -->
-                </tbody>
-            </table>
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Generator Status Overview</h3>
+            </div>
+            <canvas id="generatorStatusChart"></canvas>
         </div>
-        
-        <div class="pagination">
-            <button><i class="fas fa-chevron-left"></i></button>
-            <button class="active">1</button>
-            <button>2</button>
-            <button>3</button>
-            <button><i class="fas fa-chevron-right"></i></button>
+
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Parts Stock Levels</h3>
+            </div>
+            <canvas id="partsStockChart"></canvas>
         </div>
+
     </section>
 </main>
 
-<!-- Service Details Modal (reused from clientportal.html and records.html) -->
-<div class="modal" id="serviceDetailsModal">
+<!-- Sign In/Up Modal -->
+<div class="modal" id="signInUpModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Service Record Details</h3>
-            <button class="close-modal">&times;</button>
+            <h3>Sign In / Sign Up</h3>
+            <button class="close-modal" id="closeSignInUpModal">&times;</button>
         </div>
         <div class="modal-body">
-            <div class="detail-grid">
-                <div class="detail-card">
-                    <h4>Service Information</h4>
-                    <p><strong>ID:</strong> <span data-key="id">SRV-001</span></p>
-                    <p><strong>Date:</strong> <span data-key="date">March 10, 2024</span></p>
-                    <p><strong>Duration:</strong> <span data-key="duration">2.5 hours</span></p>
-                    <p><strong>Type:</strong> <span data-key="type">Scheduled Maintenance</span></p>
-                </div>
-                
-                <div class="detail-card">
-                    <h4>Generator Details</h4>
-                    <p><strong>Model:</strong> <span data-key="generator">GenPro X100</span></p>
-                    <p><strong>Serial No:</strong> <span data-key="serial">SN-GPX100-001</span></p>
-                    <p><strong>Location:</strong> <span data-key="location">Warehouse A</span></p>
-                    <p><strong>Hours Run:</strong> <span data-key="hoursRun">1,250 hrs</span></p>
-                </div>
-                
-                <div class="detail-card">
-                    <h4>Technician</h4>
-                    <p><strong>Name:</strong> <span data-key="tech">John Doe</span></p>
-                    <p><strong>Contact:</strong> <span data-key="techContact">john.doe@example.com</span></p>
-                    <p><strong>Team:</strong> <span data-key="techTeam">Maintenance Crew A</span></p>
-                    <p><strong>Certification:</strong> <span data-key="techCertification">Level 3 Generator Tech</span></p>
-                </div>
-                
-                <div class="detail-card">
-                    <h4>Service Details</h4>
-                    <p><strong>Status:</strong> <span class="status-badge" data-key="status">Completed</span></p>
-                    <p><strong>Next Service:</strong> <span data-key="next">September 10, 2024</span></p>
-                    <p><strong>Service Cost:</strong> <span data-key="serviceCost">$350.00</span></p>
-                    <p><strong>Work Order:</strong> <span data-key="workOrder">WO-2024-001</span></p>
-                </div>
+            <div class="tab-buttons">
+                <button class="tab-button active" data-tab="login">Login</button>
+                <button class="tab-button" data-tab="signup">Sign Up</button>
             </div>
-            
-            <div class="parts-list">
-                <h4>Parts Used</h4>
-                <ul data-key="partsUsed">
-                    <!-- Parts will be populated by JavaScript -->
-                </ul>
+
+            <div id="loginTab" class="tab-content active">
+                <form id="loginForm">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                    <button type="submit" class="reports-button">Login</button>
+                </form>
             </div>
-            
-            <div class="notes-section">
-                <h4>Technician Notes</h4>
-                <div class="detail-card">
-                    <p data-key="notes">Generator was running smoothly with no abnormal vibrations. Oil change completed, filters replaced, and all connections checked. Battery tested at 95% capacity. Recommend monitoring oil consumption over next 100 hours.</p>
-                </div>
+
+            <div id="signupTab" class="tab-content">
+                <form id="signupForm">
+                    <label for="signupName">Full Name:</label>
+                    <input type="text" id="signupName" name="name" required>
+                    <label for="signupEmail">Email:</label>
+                    <input type="email" id="signupEmail" name="email" required>
+                    <label for="signupPassword">Password:</label>
+                    <input type="password" id="signupPassword" name="password" required minlength="6">
+                    <label for="signupRole">Role:</label>
+                    <select id="signupRole" name="role" required>
+                        <option value="client">Client</option>
+                        <option value="technician">Technician</option>
+                    </select>
+                    <button type="submit" class="reports-button">Sign Up</button>
+                </form>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- First Login Password Change Modal -->
+<div class="modal" id="firstLoginModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Change Default Password</h3>
+            <button class="close-modal" id="closeFirstLoginModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>It looks like this is your first time logging in with the default admin account. For security, please change your password.</p>
+            <form id="firstLoginForm">
+                <div class="detail-card">
+                    <label for="newAdminName">Full Name:</label>
+                    <input type="text" id="newAdminName" name="newName" required>
+                    <label for="newAdminEmail">Email:</label>
+                    <input type="email" id="newAdminEmail" name="newEmail" required>
+                    <label for="newAdminPassword">New Password:</label>
+                    <input type="password" id="newAdminPassword" name="newPassword" required minlength="6">
+                    <label for="confirmAdminPassword">Confirm New Password:</label>
+                    <input type="password" id="confirmAdminPassword" name="confirmPassword" required minlength="6">
+                </div>
+            </form>
+        </div>
         <div class="modal-footer">
-            <button class="btn-close">Close</button>
-            <button class="btn-print"><i class="fas fa-print"></i> Print Record</button>
+            <button class="reports-button" type="submit" form="firstLoginForm"><i class="fas fa-save"></i> Set New Password</button>
         </div>
     </div>
 </div>

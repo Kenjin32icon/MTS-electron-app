@@ -3,237 +3,256 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GenMaint Pro - Maintenance Schedule</title>
+    <title>GenMaint Pro - Schedule</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Header Section -->
-    <header>
-        <nav>
-            <div class="logo">
-                <div class="logo-placeholder" aria-label="GenMaint Pro Logo">GP</div>
-                <div class="title">
-                    <h1>GenMaint Pro</h1>
-                    <p>Generator Maintenance System</p>
-                </div>
-            </div>
-            <button class="menu-button" aria-label="Menu" aria-expanded="false">
-                <span class="menu-icon">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </span>
-                <span class="menu-text">Menu</span>
-            </button>
-            <div class="header-container">
-                <div class="nav-container" id="main-nav">
-                    <ul class="nav-links" role="menu">
-                        <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                        <li><a href="registry.html"><i class="fas fa-list"></i> Registry</a></li>
-                        <li><a href="schedule.html" class="active"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
-                        <li><a href="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
-                        <li><a href="parts.html"><i class="fas fa-cogs"></i> Parts</a></li>
-                        <li><a href="team.html"><i class="fas fa-users"></i> Team</a></li>
-                    </ul>
-                </div>
-                <div class="nav-actions">
-                    <button class="toggle-button" id="darkModeToggle">
-                        <i class="fas fa-moon" id="darkModeIcon"></i>
-                        <span id="darkModeText">Light Mode</span>
-                    </button>
-                    <a href="reports.html" class="reports-button"><i class="fas fa-chart-bar"></i> Reports</a>
-                    <a href="signin.html" class="signing-button"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-                    <a href="clientportal.html" class="client-button"><i class="fas fa-user-circle"></i> Client Portal</a>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Main Content Section -->
-    <main>
-        <section class="schedule-management service-records" aria-labelledby="schedule-heading">
-            <div class="section-header">
-                <div>
-                    <h2 id="schedule-heading"><i class="fas fa-calendar-alt"></i> Maintenance Schedule</h2>
-                    <p>View and manage upcoming generator services.</p>
-                </div>
-                <div class="action-buttons-group">
-                    <button class="reports-button"><i class="fas fa-cog"></i> Configure Intervals</button>
-                    <button class="reports-button" id="addNewServiceBtn"><i class="fas fa-plus-circle"></i> Add New Service</button>
-                </div>
-            </div>
-
-            <div class="calendar-navigation">
-                <button class="reports-button" id="prevMonth"><i class="fas fa-chevron-left"></i> Previous</button>
-                <h3 id="currentMonthYear"></h3>
-                <button class="reports-button" id="nextMonth">Next <i class="fas fa-chevron-right"></i></button>
-            </div>
-
-            <div class="calendar-grid" id="calendarGrid">
-                <!-- Calendar days will be generated here by JavaScript -->
-            </div>
-        </section>
-    </main>
-
-    <!-- Service Details Modal (reusing the same structure from reports.html) -->
-    <div class="modal" id="serviceDetailsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Scheduled Service Details</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="detail-grid">
-                    <div class="detail-card">
-                        <h4>Service Information</h4>
-                        <p><strong>ID:</strong> <span data-key="id"></span></p>
-                        <p><strong>Date:</strong> <span data-key="date"></span></p>
-                        <p><strong>Time:</strong> <span data-key="time"></span></p>
-                        <p><strong>Type:</strong> <span data-key="type"></span></p>
-                    </div>
-
-                    <div class="detail-card">
-                        <h4>Generator Details</h4>
-                        <p><strong>Model:</strong> <span data-key="generator"></span></p>
-                        <p><strong>Serial No:</strong> <span data-key="serial"></span></p>
-                        <p><strong>Location:</strong> <span data-key="location"></span></p>
-                        <p><strong>Last Service:</strong> <span data-key="lastService"></span></p>
-                    </div>
-
-                    <div class="detail-card">
-                        <h4>Assigned Team</h4>
-                        <p><strong>Technician:</strong> <span data-key="technician"></span></p>
-                        <p><strong>Team:</strong> <span data-key="team"></span></p>
-                        <p><strong>Contact:</strong> <span data-key="contact"></span></p>
-                        <p><strong>Priority:</strong> <span data-key="priority"></span></p>
-                    </div>
-
-                    <div class="detail-card">
-                        <h4>Status & Notes</h4>
-                        <p><strong>Status:</strong> <span class="status-badge" data-key="status"></span></p>
-                        <p><strong>Estimated Duration:</strong> <span data-key="duration"></span></p>
-                        <p><strong>Required Parts:</strong> <span data-key="parts"></span></p>
-                        <p><strong>Notes:</strong> <span data-key="notes"></span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-close">Close</button>
-                <button class="btn-print"><i class="fas fa-print"></i> Print Schedule</button>
-                <button class="reports-button"><i class="fas fa-check-circle"></i> Mark as Completed</button>
+<header>
+    <nav>
+        <div class="logo">
+            <div class="logo-placeholder" aria-label="GenMaint Pro Logo">GP</div>
+            <div class="title">
+                <h1>GenMaint Pro</h1>
+                <p>Generator Maintenance System</p>
             </div>
         </div>
-    </div>
-
-    <!-- Add New Service Modal -->
-    <div class="modal" id="addServiceModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add New Service</h3>
-                <button class="close-modal">&times;</button>
+        <!-- Menu button removed -->
+        <div class="header-container">
+            <div class="nav-container" id="main-nav">
+                <ul class="nav-links" role="menu">
+                    <li><a href="#" data-page="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#" data-page="registry.html"><i class="fas fa-list"></i> Registry</a></li>
+                    <li><a href="#" data-page="schedule.html" class="active"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
+                    <li><a href="#" data-page="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
+                    <li><a href="#" data-page="parts.html"><i class="fas fa-cogs"></i> Parts</a></li>
+                    <li><a href="#" data-page="team.html"><i class="fas fa-users"></i> Team</a></li>
+                </ul>
             </div>
-            <div class="modal-body">
-                <div class="form-navigation-tabs">
-                    <button type="button" class="nav-tab active" data-section="service-info">Service Info</button>
-                    <button type="button" class="nav-tab" data-section="gen-details">Generator Details</button>
-                    <button type="button" class="nav-tab" data-section="assigned-team">Assigned Team</button>
-                    <button type="button" class="nav-tab" data-section="additional-info">Additional Info</button>
+            <div class="nav-actions">
+                <button class="toggle-button" id="darkModeToggle">
+                    <i class="fas fa-moon" id="darkModeIcon"></i>
+                    <span id="darkModeText">Light Mode</span>
+                </button>
+                <a href="#" data-page="reports.html" class="reports-button"><i class="fas fa-chart-bar"></i> Reports</a>
+                <!-- Dynamic Sign In/Out Button -->
+                <a href="#" class="signing-button" id="authButton"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+                <!-- Client Portal Link (conditionally visible) -->
+                <a href="#" data-page="clientportal.html" class="client-button" id="clientPortalLink" style="display: none;"><i class="fas fa-user-circle"></i> Client Portal</a>
+                <!-- Admin Panel Link (conditionally visible) -->
+                <a href="#" data-page="admin.html" class="client-button" id="adminPanelLink" style="display: none;"><i class="fas fa-user-shield"></i> Admin Panel</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <section class="schedule-section service-records" aria-labelledby="schedule-heading">
+        <div class="section-header">
+            <div>
+                <h2 id="schedule-heading"><i class="fas fa-calendar-alt"></i> Service Schedule</h2>
+                <p>Plan and track upcoming maintenance and repairs.</p>
+            </div>
+            <div class="export">
+                <button class="reports-button" id="addScheduledServiceBtn"><i class="fas fa-plus"></i> Add New Schedule</button>
+                <button class="reports-button" id="exportScheduleData"><i class="fas fa-file-export"></i> Export Data</button>
+            </div>
+        </div>
+
+        <div class="stats-container" id="scheduleStatsContainer">
+            <div class="stat-card" role="region" aria-labelledby="upcoming-services-heading">
+                <div class="stat-label"><i class="fas fa-calendar-day"></i> Upcoming Services</div>
+                <div class="stat-value" id="upcomingServices">0</div>
+                <div class="stat-trend" id="upcomingServicesTrend">N/A</div>
+            </div>
+            <div class="stat-card pending" role="region" aria-labelledby="pending-schedule-heading">
+                <div class="stat-label"><i class="fas fa-hourglass-start"></i> Pending Services</div>
+                <div class="stat-value" id="pendingServicesSchedule">0</div>
+                <div class="stat-trend" id="pendingServicesScheduleTrend">N/A</div>
+            </div>
+            <div class="stat-card overdue" role="region" aria-labelledby="overdue-schedule-heading">
+                <div class="stat-label"><i class="fas fa-exclamation-triangle"></i> Overdue Services</div>
+                <div class="stat-value" id="overdueServicesSchedule">0</div>
+                <div class="stat-trend" id="overdueServicesScheduleTrend">N/A</div>
+            </div>
+            <div class="stat-card completed" role="region" aria-labelledby="completed-this-month-heading">
+                <div class="stat-label"><i class="fas fa-check-double"></i> Completed This Month</div>
+                <div class="stat-value" id="servicesCompletedThisMonth">0</div>
+                <div class="stat-trend" id="servicesCompletedThisMonthTrend">N/A</div>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <input type="text" placeholder="Search by Generator, Technician, Type..." id="scheduleSearch">
+            <select id="scheduleStatusFilter">
+                <option value="">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="completed">Completed</option>
+                <option value="overdue">Overdue</option>
+            </select>
+            <input type="date" id="scheduleDateFrom" placeholder="From Date">
+            <input type="date" id="scheduleDateTo" placeholder="To Date">
+            <button id="applyScheduleFilters"><i class="fas fa-filter"></i> Apply Filters</button>
+            <button id="resetScheduleFilters"><i class="fas fa-redo"></i> Reset</button>
+        </div>
+
+        <div class="table-container">
+            <div id="loading-indicator" style="text-align: center; padding: 2rem;">
+                <div class="spinner"></div>
+                <p>Loading schedule data...</p>
+            </div>
+            <table id="scheduleTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-sort="service_date">Date</th>
+                        <th class="sortable" data-sort="generator_model">Generator</th>
+                        <th class="sortable" data-sort="service_type">Type</th>
+                        <th class="sortable" data-sort="technician_name">Technician</th>
+                        <th class="sortable" data-sort="status">Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <button id="prevPage"><i class="fas fa-chevron-left"></i></button>
+            <div id="pageNumbers">
+                <!-- Page numbers will be populated by JavaScript -->
+            </div>
+            <button id="nextPage"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+</main>
+
+<!-- Add/Edit Service Modal (reused from records.html) -->
+<div class="modal" id="serviceModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="serviceModalTitle">Add New Service</h3>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="serviceForm">
+                <input type="hidden" id="serviceId">
+                <label for="serviceGeneratorId">Generator:</label>
+                <select id="serviceGeneratorId" name="generator_id" required>
+                    <!-- Generators will be loaded dynamically -->
+                </select>
+                <label for="serviceDate">Service Date:</label>
+                <input type="date" id="serviceDate" name="service_date" required>
+                <label for="serviceType">Service Type:</label>
+                <input type="text" id="serviceType" name="service_type" required>
+                <label for="serviceTechnicianId">Technician:</label>
+                <select id="serviceTechnicianId" name="technician_id" required>
+                    <!-- Technicians will be loaded dynamically -->
+                </select>
+                <label for="serviceStatus">Status:</label>
+                <select id="serviceStatus" name="status" required>
+                    <option value="pending">Pending</option>
+                    <option value="scheduled">Scheduled</option>
+                    <option value="completed">Completed</option>
+                    <option value="overdue">Overdue</option>
+                </select>
+                <label for="serviceDuration">Duration (hours):</label>
+                <input type="number" id="serviceDuration" name="duration" step="0.1" min="0">
+                <label for="serviceCost">Service Cost (Ksh):</label>
+                <input type="number" id="serviceCost" name="service_cost" step="0.01" min="0">
+                <label for="serviceWorkOrder">Work Order:</label>
+                <input type="text" id="serviceWorkOrder" name="work_order">
+                <label for="serviceNotes">Notes:</label>
+                <textarea id="serviceNotes" name="notes"></textarea>
+
+                <h4>Parts Used:</h4>
+                <div id="partsUsedContainer">
+                    <!-- Dynamic parts input fields -->
+                    <button type="button" id="addPartUsedBtn" class="reports-button" style="margin-top: 10px;"><i class="fas fa-plus"></i> Add Part</button>
                 </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-close">Cancel</button>
+            <button class="btn-save" type="submit" form="serviceForm">Save Service</button>
+        </div>
+    </div>
+</div>
 
-                <form id="addServiceForm">
-                    <!-- Section 1: Service Information -->
-                    <div class="form-section active" id="section-service-info">
-                        <div class="detail-card">
-                            <h4>Service Information</h4>
-                            <label for="serviceId">Service ID:</label>
-                            <input type="text" id="serviceId" name="id" required>
+<!-- Sign In/Up Modal -->
+<div class="modal" id="signInUpModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Sign In / Sign Up</h3>
+            <button class="close-modal" id="closeSignInUpModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="tab-buttons">
+                <button class="tab-button active" data-tab="login">Login</button>
+                <button class="tab-button" data-tab="signup">Sign Up</button>
+            </div>
 
-                            <label for="serviceDate">Date:</label>
-                            <input type="date" id="serviceDate" name="date" required>
-
-                            <label for="serviceTime">Time:</label>
-                            <input type="time" id="serviceTime" name="time" required>
-
-                            <label for="serviceType">Type:</label>
-                            <input type="text" id="serviceType" name="type" placeholder="e.g., Oil Change, Inspection" required>
-
-                            <label for="serviceStatus">Status:</label>
-                            <select id="serviceStatus" name="status" required>
-                                <option value="pending">Pending</option>
-                                <option value="completed">Completed</option>
-                                <option value="overdue">Overdue</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Section 2: Generator Details -->
-                    <div class="form-section" id="section-gen-details">
-                        <div class="detail-card">
-                            <h4>Generator Details</h4>
-                            <label for="genModel">Generator Model:</label>
-                            <input type="text" id="genModel" name="generator" required>
-
-                            <label for="genSerial">Serial No:</label>
-                            <input type="text" id="genSerial" name="serial" required>
-
-                            <label for="genLocation">Location:</label>
-                            <input type="text" id="genLocation" name="location" required>
-
-                            <label for="genLastService">Last Service Date:</label>
-                            <input type="date" id="genLastService" name="lastService">
-                        </div>
-                    </div>
-
-                    <!-- Section 3: Assigned Team -->
-                    <div class="form-section" id="section-assigned-team">
-                        <div class="detail-card">
-                            <h4>Assigned Team</h4>
-                            <label for="techName">Technician:</label>
-                            <input type="text" id="techName" name="technician" required>
-
-                            <label for="techTeam">Team:</label>
-                            <input type="text" id="techTeam" name="team">
-
-                            <label for="techContact">Contact Email:</label>
-                            <input type="email" id="techContact" name="contact">
-
-                            <label for="servicePriority">Priority:</label>
-                            <select id="servicePriority" name="priority" required>
-                                <option value="Low">Low</option>
-                                <option value="Medium">Medium</option>
-                                <option value="High">High</option>
-                                <option value="Critical">Critical</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Section 4: Additional Information -->
-                    <div class="form-section" id="section-additional-info">
-                        <div class="detail-card">
-                            <h4>Additional Information</h4>
-                            <label for="serviceDuration">Estimated Duration:</label>
-                            <input type="text" id="serviceDuration" name="duration" placeholder="e.g., 1.5 hours">
-
-                            <label for="serviceParts">Required Parts:</label>
-                            <textarea id="serviceParts" name="parts" rows="3" placeholder="e.g., Oil Filter, 5L Synthetic Oil"></textarea>
-
-                            <label for="serviceNotes">Notes:</label>
-                            <textarea id="serviceNotes" name="notes" rows="3"></textarea>
-                        </div>
-                    </div>
+            <div id="loginTab" class="tab-content active">
+                <form id="loginForm">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                    <button type="submit" class="reports-button">Login</button>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-close">Cancel</button>
-                <button type="button" class="btn-print" id="prevServiceSectionBtn" style="display: none;"><i class="fas fa-chevron-left"></i> Previous</button>
-                <button type="button" class="btn-print" id="nextServiceSectionBtn">Next <i class="fas fa-chevron-right"></i></button>
-                <button type="submit" class="btn-print" form="addServiceForm" id="submitNewServiceFormBtn" style="display: none;"><i class="fas fa-plus-circle"></i> Add Service</button>
+
+            <div id="signupTab" class="tab-content">
+                <form id="signupForm">
+                    <label for="signupName">Full Name:</label>
+                    <input type="text" id="signupName" name="name" required>
+                    <label for="signupEmail">Email:</label>
+                    <input type="email" id="signupEmail" name="email" required>
+                    <label for="signupPassword">Password:</label>
+                    <input type="password" id="signupPassword" name="password" required minlength="6">
+                    <label for="signupRole">Role:</label>
+                    <select id="signupRole" name="role" required>
+                        <option value="client">Client</option>
+                        <option value="technician">Technician</option>
+                    </select>
+                    <button type="submit" class="reports-button">Sign Up</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="module" src="script.js"></script>
+<!-- First Login Password Change Modal -->
+<div class="modal" id="firstLoginModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Change Default Password</h3>
+            <button class="close-modal" id="closeFirstLoginModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>It looks like this is your first time logging in with the default admin account. For security, please change your password.</p>
+            <form id="firstLoginForm">
+                <div class="detail-card">
+                    <label for="newAdminName">Full Name:</label>
+                    <input type="text" id="newAdminName" name="newName" required>
+                    <label for="newAdminEmail">Email:</label>
+                    <input type="email" id="newAdminEmail" name="newEmail" required>
+                    <label for="newAdminPassword">New Password:</label>
+                    <input type="password" id="newAdminPassword" name="newPassword" required minlength="6">
+                    <label for="confirmAdminPassword">Confirm New Password:</label>
+                    <input type="password" id="confirmAdminPassword" name="confirmPassword" required minlength="6">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="reports-button" type="submit" form="firstLoginForm"><i class="fas fa-save"></i> Set New Password</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module" src="script.js"></script>
 </body>
 </html>

@@ -8,285 +8,251 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Header Section -->
-    <header>
-        <nav>
-            <div class="logo">
-                <div class="logo-placeholder" aria-label="GenMaint Pro Logo">GP</div>
-                <div class="title">
-                    <h1>GenMaint Pro</h1>
-                    <p>Generator Maintenance System</p>
-                </div>
-            </div>
-            <!-- Added menu-button for mobile navigation consistency -->
-            <button class="menu-button" aria-label="Menu" aria-expanded="false">
-                <span class="menu-icon">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </span>
-                <span class="menu-text">Menu</span>
-            </button>
-            <div class="header-container">
-                <div class="nav-container" id="main-nav"> <!-- Added id="main-nav" for script.js -->
-                    <ul class="nav-links" role="menu"> <!-- Added role="menu" for accessibility -->
-                        <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                        <li><a href="registry.html"><i class="fas fa-list"></i> Registry</a></li>
-                        <li><a href="schedule.html"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
-                        <li><a href="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
-                        <li><a href="parts.html"><i class="fas fa-cogs"></i> Parts</a></li>
-                        <li><a href="team.html" class="active"><i class="fas fa-users"></i> Team</a></li>
-                    </ul>
-                </div>
-                <div class="nav-actions">
-                    <button class="toggle-button" id="darkModeToggle">
-                        <i class="fas fa-moon" id="darkModeIcon"></i>
-                        <span id="darkModeText">Light Mode</span>
-                    </button>
-                    <a href="reports.html" class="reports-button"><i class="fas fa-chart-bar"></i> Reports</a>
-                    <a href="signin.html" class="signing-button"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-                    <a href="clientportal.html" class="client-button"><i class="fas fa-user-circle"></i> Client Portal</a>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Main Content Section -->
-    <main>
-        <section class="team-management service-records" aria-labelledby="team-heading">
-            <div class="section-header">
-                <div>
-                    <h2 id="team-heading"><i class="fas fa-users"></i> Team Management</h2>
-                    <p>Manage technicians and their assignments.</p>
-                </div>
-                <button class="reports-button" id="addNewTechnicianBtn"><i class="fas fa-user-plus"></i> Add New Technician</button>
-            </div>
-
-            <!-- Stat Cards for Team Management -->
-            <div class="stats-container">
-                <div class="stat-card completed">
-                    <div class="stat-label"><i class="fas fa-user-check"></i> Active Technicians</div>
-                    <div class="stat-value">12</div>
-                    <div class="stat-trend">↑ 2 new this month</div>
-                </div>
-                <div class="stat-card pending">
-                    <div class="stat-label"><i class="fas fa-tools"></i> Certifications Due</div>
-                    <div class="stat-value">3</div>
-                    <div class="stat-trend">Next month</div>
-                </div>
-                <div class="stat-card overdue">
-                    <div class="stat-label"><i class="fas fa-calendar-times"></i> Overdue Assignments</div>
-                    <div class="stat-value">1</div>
-                    <div class="stat-trend">High priority</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label"><i class="fas fa-chart-line"></i> Avg Services/Tech (Mo)</div>
-                    <div class="stat-value">10.5</div>
-                    <div class="stat-trend">Consistent performance</div>
-                </div>
-            </div>
-
-            <!-- Filter Bar for Team -->
-            <div class="filter-bar">
-                <input type="text" placeholder="Search by Name, Email..." id="teamSearch">
-                <select id="teamRoleFilter">
-                    <option value="">All Roles</option>
-                    <option value="Technician">Technician</option>
-                    <option value="Supervisor">Supervisor</option>
-                    <option value="Admin">Administrator</option>
-                </select>
-                <select id="teamStatusFilter">
-                    <option value="">All Statuses</option>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                </select>
-                <button id="applyTeamFilters"><i class="fas fa-filter"></i> Apply Filters</button>
-                <button id="resetTeamFilters"><i class="fas fa-redo"></i> Reset</button>
-            </div>
-
-            <div class="table-container">
-                <table id="teamTable"> <!-- Added ID for JS targeting -->
-                    <thead>
-                        <tr>
-                            <th class="sortable" data-sort="name">Name</th>
-                            <th class="sortable" data-sort="email">Email</th>
-                            <th class="sortable" data-sort="phone">Phone</th>
-                            <th class="sortable" data-sort="role">Role</th>
-                            <th class="sortable" data-sort="assignedServices">Assigned Services</th>
-                            <th class="sortable" data-sort="status">Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Data will be populated dynamically via JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Pagination for Team -->
-            <div class="pagination">
-                <button><i class="fas fa-chevron-left"></i></button>
-                <button class="active">1</button>
-                <button>2</button>
-                <button>3</button>
-                <button><i class="fas fa-chevron-right"></i></button>
-            </div>
-        </section>
-    </main>
-
-    <!-- Technician Details Modal (similar to Service Details Modal) -->
-    <div class="modal" id="technicianDetailsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Technician Details</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="detail-grid">
-                    <div class="detail-card">
-                        <h4>Personal Information</h4>
-                        <p><strong>Name:</strong> <span data-key="name">John Doe</span></p>
-                        <p><strong>Email:</strong> <span data-key="email">john.doe@example.com</span></p>
-                        <p><strong>Phone:</strong> <span data-key="phone">+1234567890</span></p>
-                        <p><strong>Address:</strong> <span data-key="address">123 Main St, Anytown</span></p>
-                    </div>
-
-                    <div class="detail-card">
-                        <h4>Employment Details</h4>
-                        <p><strong>Employee ID:</strong> <span data-key="employeeId">EMP-001</span></p>
-                        <p><strong>Role:</strong> <span data-key="role">Technician</span></p>
-                        <p><strong>Hire Date:</strong> <span data-key="hireDate">2020-05-10</span></p>
-                        <p><strong>Team:</strong> <span data-key="team">Maintenance Crew A</span></p>
-                    </div>
-
-                    <div class="detail-card">
-                        <h4>Performance & Skills</h4>
-                        <p><strong>Assigned Services:</strong> <span data-key="assignedServices">15</span></p>
-                        <p><strong>Completed Services (Mo):</strong> <span data-key="completedServicesMo">10</span></p>
-                        <p><strong>Certifications:</strong> <span data-key="certifications">Level 3 Generator Tech, Electrical Safety</span></p>
-                        <p><strong>Specialties:</strong> <span data-key="specialties">Diesel Generators, Troubleshooting</span></p>
-                    </div>
-
-                    <div class="detail-card">
-                        <h4>Status & Availability</h4>
-                        <p><strong>Status:</strong> <span class="status-badge" data-key="status">Active</span></p>
-                        <p><strong>Availability:</strong> <span data-key="availability">Full-time</span></p>
-                        <p><strong>Last Activity:</strong> <span data-key="lastActivity">2024-05-20</span></p>
-                        <p><strong>Next Assignment:</strong> <span data-key="nextAssignment">2024-05-22 (GenPro X100)</span></p>
-                    </div>
-                </div>
-
-                <div class="notes-section">
-                    <h4>Notes</h4>
-                    <div class="detail-card">
-                        <p data-key="notes">Consistently high performer. Excellent problem-solving skills. Needs to renew Electrical Safety certification by end of year.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-close">Close</button>
-                <button class="btn-print"><i class="fas fa-print"></i> Print Profile</button>
+<header>
+    <nav>
+        <div class="logo">
+            <div class="logo-placeholder" aria-label="GenMaint Pro Logo">GP</div>
+            <div class="title">
+                <h1>GenMaint Pro</h1>
+                <p>Generator Maintenance System</p>
             </div>
         </div>
-    </div>
-
-    <!-- New Technician Modal (Sectioned Form) -->
-    <div class="modal" id="addTechnicianModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add New Technician</h3>
-                <button class="close-modal">&times;</button>
+        <!-- <button class="menu-button" aria-label="Menu" aria-expanded="false">
+            <span class="menu-icon">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </span>
+            <span class="menu-text">Menu</span>
+        </button> -->
+        <div class="header-container">
+            <div class="nav-container" id="main-nav">
+                <ul class="nav-links" role="menu">
+                    <li><a href="#" data-page="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#" data-page="registry.html"><i class="fas fa-list"></i> Registry</a></li>
+                    <li><a href="#" data-page="schedule.html"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
+                    <li><a href="#" data-page="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
+                    <li><a href="#" data-page="parts.html"><i class="fas fa-cogs"></i> Parts</a></li>
+                    <li><a href="#" data-page="team.html" class="active"><i class="fas fa-users"></i> Team</a></li>
+                </ul>
             </div>
-            <div class="modal-body">
-                <div class="form-navigation-tabs">
-                    <button type="button" class="nav-tab active" data-section="personal">Personal Info</button>
-                    <button type="button" class="nav-tab" data-section="employment">Employment</button>
-                    <button type="button" class="nav-tab" data-section="skills">Skills & Certs</button>
-                </div>
+            <div class="nav-actions">
+                <button class="toggle-button" id="darkModeToggle">
+                    <i class="fas fa-moon" id="darkModeIcon"></i>
+                    <span id="darkModeText">Light Mode</span>
+                </button>
+                <a href="#" data-page="reports.html" class="reports-button"><i class="fas fa-chart-bar"></i> Reports</a>
+                <!-- Dynamic Sign In/Out Button -->
+                <a href="#" class="signing-button" id="authButton"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+                <!-- Client Portal Link (conditionally visible) -->
+                <a href="#" data-page="clientportal.html" class="client-button" id="clientPortalLink" style="display: none;"><i class="fas fa-user-circle"></i> Client Portal</a>
+                <!-- Admin Panel Link (conditionally visible) -->
+                <a href="#" data-page="admin.html" class="client-button" id="adminPanelLink" style="display: none;"><i class="fas fa-user-shield"></i> Admin Panel</a>
+            </div>
+        </div>
+    </nav>
+</header>
 
-                <form id="addTechnicianForm">
-                    <div class="form-section active" id="section-personal">
-                        <div class="detail-grid">
-                            <div>
-                                <label for="techName">Full Name</label>
-                                <input type="text" id="techName" name="name" required>
-                            </div>
-                            <div>
-                                <label for="techEmail">Email</label>
-                                <input type="email" id="techEmail" name="email" required>
-                            </div>
-                            <div>
-                                <label for="techPhone">Phone Number</label>
-                                <input type="text" id="techPhone" name="phone">
-                            </div>
-                            <div>
-                                <label for="techAddress">Address</label>
-                                <input type="text" id="techAddress" name="address">
-                            </div>
-                        </div>
-                    </div>
+<main>
+    <section class="team-management-section service-records" aria-labelledby="team-heading">
+        <div class="section-header">
+            <div>
+                <h2 id="team-heading"><i class="fas fa-users"></i> Team Management</h2>
+                <p>Manage your technicians and their assignments.</p>
+            </div>
+            <div class="export">
+                <button class="reports-button" id="addTechnicianBtn"><i class="fas fa-user-plus"></i> Add New Technician</button>
+                <button class="reports-button" id="exportTeamData"><i class="fas fa-file-export"></i> Export Data</button>
+            </div>
+        </div>
 
-                    <div class="form-section" id="section-employment">
-                        <div class="detail-grid">
-                            <div>
-                                <label for="techEmployeeId">Employee ID</label>
-                                <input type="text" id="techEmployeeId" name="employeeId" required>
-                            </div>
-                            <div>
-                                <label for="techRole">Role</label>
-                                <select id="techRole" name="role" required>
-                                    <option value="">Select Role</option>
-                                    <option value="Technician">Technician</option>
-                                    <option value="Supervisor">Supervisor</option>
-                                    <option value="Admin">Administrator</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="techHireDate">Hire Date</label>
-                                <input type="date" id="techHireDate" name="hireDate" required>
-                            </div>
-                            <div>
-                                <label for="techTeam">Team</label>
-                                <input type="text" id="techTeam" name="team">
-                            </div>
-                            <div>
-                                <label for="techStatus">Status</label>
-                                <select id="techStatus" name="status" required>
-                                    <option value="Active">Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+        <div class="stats-container" id="teamStatsContainer">
+            <div class="stat-card active-techs" role="region" aria-labelledby="active-techs-count-heading">
+                <div class="stat-label"><i class="fas fa-user-check"></i> Active Technicians</div>
+                <div class="stat-value" id="activeTechs">0</div>
+                <div class="stat-trend" id="activeTechsTrend">N/A</div>
+            </div>
+            <div class="stat-card overdue" role="region" aria-labelledby="certifications-due-heading">
+                <div class="stat-label"><i class="fas fa-certificate"></i> Certifications Due</div>
+                <div class="stat-value" id="certificationsDue">0</div>
+                <div class="stat-trend" id="certificationsDueTrend">N/A</div>
+            </div>
+            <div class="stat-card pending" role="region" aria-labelledby="overdue-assignments-heading">
+                <div class="stat-label"><i class="fas fa-tasks"></i> Overdue Assignments</div>
+                <div class="stat-value" id="overdueAssignments">0</div>
+                <div class="stat-trend" id="overdueAssignmentsTrend">N/A</div>
+            </div>
+            <div class="stat-card" role="region" aria-labelledby="avg-services-heading">
+                <div class="stat-label"><i class="fas fa-chart-pie"></i> Avg. Services/Tech (Mo)</div>
+                <div class="stat-value" id="avgServicesPerTech">N/A</div>
+                <div class="stat-trend" id="avgServicesPerTechTrend">N/A</div>
+            </div>
+        </div>
 
-                    <div class="form-section" id="section-skills">
-                        <div class="detail-grid">
-                            <div>
-                                <label for="techCertifications">Certifications (comma-separated)</label>
-                                <textarea id="techCertifications" name="certifications" rows="3"></textarea>
-                            </div>
-                            <div>
-                                <label for="techSpecialties">Specialties (comma-separated)</label>
-                                <textarea id="techSpecialties" name="specialties" rows="3"></textarea>
-                            </div>
-                            <div>
-                                <label for="techNotes">Notes</label>
-                                <textarea id="techNotes" name="notes" rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
+        <div class="filter-bar">
+            <input type="text" placeholder="Search by Name, Email, Team..." id="technicianSearch">
+            <select id="technicianStatusFilter">
+                <option value="">All Statuses</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+            <select id="technicianTeamFilter">
+                <option value="">All Teams</option>
+                <!-- Teams will be dynamically loaded -->
+            </select>
+            <button id="applyTechnicianFilters"><i class="fas fa-filter"></i> Apply Filters</button>
+            <button id="resetTechnicianFilters"><i class="fas fa-redo"></i> Reset</button>
+        </div>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn-close" id="prevTechSectionBtn" style="display: none;">Previous</button>
-                        <button type="button" class="reports-button" id="nextTechSectionBtn">Next</button>
-                        <button type="submit" class="reports-button" id="submitNewTechFormBtn" style="display: none;">Add Technician</button>
-                    </div>
+        <div class="table-container">
+            <div id="loading-indicator" style="text-align: center; padding: 2rem;">
+                <div class="spinner"></div>
+                <p>Loading technician data...</p>
+            </div>
+            <table id="techniciansTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-sort="name">Name</th>
+                        <th class="sortable" data-sort="email">Email</th>
+                        <th class="sortable" data-sort="phone">Phone</th>
+                        <th class="sortable" data-sort="team">Team</th>
+                        <th class="sortable" data-sort="certifications">Certifications</th>
+                        <th class="sortable" data-sort="status">Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <button id="prevPage"><i class="fas fa-chevron-left"></i></button>
+            <div id="pageNumbers">
+                <!-- Page numbers will be populated by JavaScript -->
+            </div>
+            <button id="nextPage"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+</main>
+
+<!-- Add/Edit Technician Modal -->
+<div class="modal" id="technicianModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="technicianModalTitle">Add New Technician</h3>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="technicianForm">
+                <input type="hidden" id="technicianId">
+                <label for="technicianName">Full Name:</label>
+                <input type="text" id="technicianName" name="name" required>
+                <label for="technicianEmail">Email:</label>
+                <input type="email" id="technicianEmail" name="email" required>
+                <label for="technicianPassword">Password (leave blank to keep current):</label>
+                <input type="password" id="technicianPassword" name="password" minlength="6">
+                <label for="technicianPhone">Phone:</label>
+                <input type="text" id="technicianPhone" name="phone">
+                <label for="technicianEmployeeId">Employee ID:</label>
+                <input type="text" id="technicianEmployeeId" name="employee_id">
+                <label for="technicianHireDate">Hire Date:</label>
+                <input type="date" id="technicianHireDate" name="hire_date">
+                <label for="technicianTeam">Team:</label>
+                <input type="text" id="technicianTeam" name="team">
+                <label for="technicianCertifications">Certifications (comma-separated):</label>
+                <input type="text" id="technicianCertifications" name="certifications">
+                <label for="technicianSpecialties">Specialties (comma-separated):</label>
+                <input type="text" id="technicianSpecialties" name="specialties">
+                <label for="technicianNotes">Notes:</label>
+                <textarea id="technicianNotes" name="notes"></textarea>
+                <label for="technicianStatus">Status:</label>
+                <select id="technicianStatus" name="status" required>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-close">Cancel</button>
+            <button class="btn-save" type="submit" form="technicianForm">Save Technician</button>
+        </div>
+    </div>
+</div>
+
+<!-- Sign In/Up Modal -->
+<div class="modal" id="signInUpModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Sign In / Sign Up</h3>
+            <button class="close-modal" id="closeSignInUpModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="tab-buttons">
+                <button class="tab-button active" data-tab="login">Login</button>
+                <button class="tab-button" data-tab="signup">Sign Up</button>
+            </div>
+
+            <div id="loginTab" class="tab-content active">
+                <form id="loginForm">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                    <button type="submit" class="reports-button">Login</button>
+                </form>
+            </div>
+
+            <div id="signupTab" class="tab-content">
+                <form id="signupForm">
+                    <label for="signupName">Full Name:</label>
+                    <input type="text" id="signupName" name="name" required>
+                    <label for="signupEmail">Email:</label>
+                    <input type="email" id="signupEmail" name="email" required>
+                    <label for="signupPassword">Password:</label>
+                    <input type="password" id="signupPassword" name="password" required minlength="6">
+                    <label for="signupRole">Role:</label>
+                    <select id="signupRole" name="role" required>
+                        <option value="client">Client</option>
+                        <option value="technician">Technician</option>
+                    </select>
+                    <button type="submit" class="reports-button">Sign Up</button>
                 </form>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="module" src="script.js"></script>
+<!-- First Login Password Change Modal -->
+<div class="modal" id="firstLoginModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Change Default Password</h3>
+            <button class="close-modal" id="closeFirstLoginModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>It looks like this is your first time logging in with the default admin account. For security, please change your password.</p>
+            <form id="firstLoginForm">
+                <div class="detail-card">
+                    <label for="newAdminName">Full Name:</label>
+                    <input type="text" id="newAdminName" name="newName" required>
+                    <label for="newAdminEmail">Email:</label>
+                    <input type="email" id="newAdminEmail" name="newEmail" required>
+                    <label for="newAdminPassword">New Password:</label>
+                    <input type="password" id="newAdminPassword" name="newPassword" required minlength="6">
+                    <label for="confirmAdminPassword">Confirm New Password:</label>
+                    <input type="password" id="confirmAdminPassword" name="confirmPassword" required minlength="6">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="reports-button" type="submit" form="firstLoginForm"><i class="fas fa-save"></i> Set New Password</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module" src="script.js"></script>
 </body>
 </html>

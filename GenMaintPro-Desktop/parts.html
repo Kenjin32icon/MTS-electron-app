@@ -8,310 +8,241 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Header Section -->
-    <header>
-        <nav>
-            <div class="logo">
-                <div class="logo-placeholder" aria-label="GenMaint Pro Logo">GP</div>
-                <div class="title">
-                    <h1>GenMaint Pro</h1>
-                    <p>Generator Maintenance System</p>
-                </div>
-            </div>
-            <button class="menu-button" aria-label="Menu" aria-expanded="false">
-                <span class="menu-icon">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </span>
-                <span class="menu-text">Menu</span>
-            </button>
-            <div class="header-container">
-                <div class="nav-container" id="main-nav">
-                    <ul class="nav-links" role="menu">
-                        <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                        <li><a href="registry.html"><i class="fas fa-list"></i> Registry</a></li>
-                        <li><a href="schedule.html"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
-                        <li><a href="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
-                        <li><a href="parts.html" class="active"><i class="fas fa-cogs"></i> Parts</a></li>
-                        <li><a href="team.html"><i class="fas fa-users"></i> Team</a></li>
-                    </ul>
-                </div>
-                <div class="nav-actions">
-                    <button class="toggle-button" id="darkModeToggle">
-                        <i class="fas fa-moon" id="darkModeIcon"></i>
-                        <span id="darkModeText">Light Mode</span>
-                    </button>
-                    <a href="reports.html" class="reports-button"><i class="fas fa-chart-bar"></i> Reports</a>
-                    <a href="signin.html" class="signing-button"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-                    <a href="clientportal.html" class="client-button"><i class="fas fa-user-circle"></i> Client Portal</a>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Main Content Section -->
-    <main>
-        <section class="parts-inventory service-records" aria-labelledby="parts-heading">
-            <div class="section-header">
-                <div>
-                    <h2 id="parts-heading"><i class="fas fa-cogs"></i> Parts Inventory</h2>
-                    <p>Manage spare parts stock and usage.</p>
-                </div>
-                <button class="reports-button" id="addNewPartBtn"><i class="fas fa-plus-circle"></i> Add New Part</button>
-            </div>
-
-            <!-- Stat Cards for Parts Inventory -->
-            <div class="stats-container">
-                <div class="stat-card completed">
-                    <div class="stat-label"><i class="fas fa-boxes"></i> Total Unique Parts</div>
-                    <div class="stat-value">75</div>
-                    <div class="stat-trend">↑ 5 new this month</div>
-                </div>
-                <div class="stat-card pending">
-                    <div class="stat-label"><i class="fas fa-exclamation-circle"></i> Low Stock Items</div>
-                    <div class="stat-value">5</div>
-                    <div class="stat-trend">Action required</div>
-                </div>
-                <div class="stat-card overdue">
-                    <div class="stat-label"><i class="fas fa-dollar-sign"></i> Total Inventory Value</div>
-                    <div class="stat-value">$12,500</div>
-                    <div class="stat-trend">↑ 8% from last quarter</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label"><i class="fas fa-truck-loading"></i> Parts Used Last Month</div>
-                    <div class="stat-value">210</div>
-                    <div class="stat-trend">↑ 15% from previous month</div>
-                </div>
-            </div>
-
-            <!-- Filter Bar for Parts -->
-            <div class="filter-bar">
-                <input type="text" placeholder="Search by Part Name, Number..." id="partSearch">
-                <select id="partCategoryFilter">
-                    <option value="">All Categories</option>
-                    <option value="Filters">Filters</option>
-                    <option value="Fluids">Fluids</option>
-                    <option value="Electrical">Electrical</option>
-                    <option value="Engine Components">Engine Components</option>
-                </select>
-                <select id="partStockStatusFilter">
-                    <option value="">All Stock Statuses</option>
-                    <option value="in-stock">In Stock</option>
-                    <option value="low-stock">Low Stock</option>
-                    <option value="out-of-stock">Out of Stock</option>
-                </select>
-                <button id="applyPartsFilters"><i class="fas fa-filter"></i> Apply Filters</button>
-                <button id="resetPartsFilters"><i class="fas fa-redo"></i> Reset</button>
-            </div>
-
-            <div class="table-container">
-                <table id="partsTable">
-                    <thead>
-                        <tr>
-                            <th class="sortable" data-sort="name">Part Name</th>
-                            <th class="sortable" data-sort="number">Part Number</th>
-                            <th class="sortable" data-sort="quantity">Quantity in Stock</th>
-                            <th class="sortable" data-sort="cost">Cost per Unit</th>
-                            <th class="sortable" data-sort="status">Stock Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Data will be populated by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Pagination for Parts -->
-            <div class="pagination">
-                <button><i class="fas fa-chevron-left"></i></button>
-                <button class="active">1</button>
-                <button>2</button>
-                <button>3</button>
-                <button><i class="fas fa-chevron-right"></i></button>
-            </div>
-        </section>
-    </main>
-
-    <!-- Part Details Modal (similar to Service Details Modal) -->
-    <div class="modal" id="partDetailsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Part Details</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="detail-grid">
-                    <div class="detail-card">
-                        <h4>Basic Information</h4>
-                        <p><strong>Part Name:</strong> <span data-key="name">Oil Filter</span></p>
-                        <p><strong>Part Number:</strong> <span data-key="number">OF-12345</span></p>
-                        <p><strong>Category:</strong> <span data-key="category">Filters</span></p>
-                        <p><strong>Description:</strong> <span data-key="description">Standard oil filter for GenPro X100 series.</span></p>
-                    </div>
-
-                    <div class="detail-card">
-                        <h4>Stock & Cost</h4>
-                        <p><strong>Quantity in Stock:</strong> <span data-key="quantity">50</span></p>
-                        <p><strong>Min Stock Level:</strong> <span data-key="minStock">10</span></p>
-                        <p><strong>Cost per Unit:</strong> $<span data-key="cost">15.00</span></p>
-                        <p><strong>Total Value:</strong> $<span data-key="totalValue">750.00</span></p>
-                    </div>
-
-                    <div class="detail-card">
-                        <h4>Supplier & Usage</h4>
-                        <p><strong>Preferred Supplier:</strong> <span data-key="supplier">FilterCo</span></p>
-                        <p><strong>Last Ordered:</strong> <span data-key="lastOrdered">2024-04-01</span></p>
-                        <p><strong>Used Last Month:</strong> <span data-key="usedLastMonth">15 units</span></p>
-                        <p><strong>Compatible Generators:</strong> <span data-key="compatibleGens">GenPro X100, GenPro X200</span></p>
-                    </div>
-
-                    <div class="detail-card">
-                        <h4>Stock Status</h4>
-                        <p><strong>Status:</strong> <span class="status-badge" data-key="status">In Stock</span></p>
-                        <p><strong>Location:</strong> <span data-key="location">Warehouse Shelf A3</span></p>
-                        <p><strong>Reorder Point:</strong> <span data-key="reorderPoint">15 units</span></p>
-                        <p><strong>Lead Time:</strong> <span data-key="leadTime">3-5 business days</span></p>
-                    </div>
-                </div>
-
-                <div class="notes-section">
-                    <h4>Notes</h4>
-                    <div class="detail-card">
-                        <p data-key="notes">Ensure regular stock checks. Consider bulk ordering for cost savings.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-close">Close</button>
-                <button class="btn-print"><i class="fas fa-print"></i> Print Part Info</button>
+<header>
+    <nav>
+        <div class="logo">
+            <div class="logo-placeholder" aria-label="GenMaint Pro Logo">GP</div>
+            <div class="title">
+                <h1>GenMaint Pro</h1>
+                <p>Generator Maintenance System</p>
             </div>
         </div>
-    </div>
-
-    <!-- Add New Part Modal - IMPROVED -->
-    <div class="modal" id="addPartModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add New Part</h3>
-                <button class="close-modal">&times;</button>
+        <!-- <button class="menu-button" aria-label="Menu" aria-expanded="false">
+            <span class="menu-icon">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </span>
+            <span class="menu-text">Menu</span>
+        </button> -->
+        <div class="header-container">
+            <div class="nav-container" id="main-nav">
+                <ul class="nav-links" role="menu">
+                    <li><a href="#" data-page="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#" data-page="registry.html"><i class="fas fa-list"></i> Registry</a></li>
+                    <li><a href="#" data-page="schedule.html"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
+                    <li><a href="#" data-page="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
+                    <li><a href="#" data-page="parts.html" class="active"><i class="fas fa-cogs"></i> Parts</a></li>
+                    <li><a href="#" data-page="team.html"><i class="fas fa-users"></i> Team</a></li>
+                </ul>
             </div>
-            <div class="modal-body">
-                <div class="form-navigation-tabs">
-                    <button class="nav-tab active" data-section="basic-part">Basic Info</button>
-                    <button class="nav-tab" data-section="stock-cost">Stock & Cost</button>
-                    <button class="nav-tab" data-section="supplier-usage">Supplier & Usage</button>
-                    <button class="nav-tab" data-section="stock-status">Stock Status</button>
-                    <button class="nav-tab" data-section="part-notes">Notes</button>
-                </div>
+            <div class="nav-actions">
+                <button class="toggle-button" id="darkModeToggle">
+                    <i class="fas fa-moon" id="darkModeIcon"></i>
+                    <span id="darkModeText">Light Mode</span>
+                </button>
+                <a href="#" data-page="reports.html" class="reports-button"><i class="fas fa-chart-bar"></i> Reports</a>
+                <!-- Dynamic Sign In/Out Button -->
+                <a href="#" class="signing-button" id="authButton"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+                <!-- Client Portal Link (conditionally visible) -->
+                <a href="#" data-page="clientportal.html" class="client-button" id="clientPortalLink"><i class="fas fa-user-circle"></i> Client Portal</a>
+                <!-- Admin Panel Link (conditionally visible) -->
+                <a href="#" data-page="admin.html" class="client-button" id="adminPanelLink"><i class="fas fa-user-shield"></i> Admin Panel</a>
+            </div>
+        </div>
+    </nav>
+</header>
 
-                <form id="addPartForm">
-                    <!-- Section 1: Basic Information -->
-                    <div class="form-section active" id="section-basic-part">
-                        <div class="detail-card">
-                            <h4>Basic Information</h4>
-                            <label for="newPartName">Part Name:</label>
-                            <input type="text" id="newPartName" name="name" placeholder="e.g., Oil Filter" required>
+<main>
+    <section class="parts-inventory-section service-records" aria-labelledby="parts-heading">
+        <div class="section-header">
+            <div>
+                <h2 id="parts-heading"><i class="fas fa-cogs"></i> Parts Inventory</h2>
+                <p>Manage your spare parts and components.</p>
+            </div>
+            <div class="export">
+                <button class="reports-button" id="addPartBtn"><i class="fas fa-plus"></i> Add New Part</button>
+                <button class="reports-button" id="exportPartsData"><i class="fas fa-file-export"></i> Export Data</button>
+            </div>
+        </div>
 
-                            <label for="newPartNumber">Part Number:</label>
-                            <input type="text" id="newPartNumber" name="number" placeholder="e.g., OF-12345" required>
+        <div class="stats-container" id="partsStatsContainer">
+            <div class="stat-card" role="region" aria-labelledby="total-parts-heading">
+                <div class="stat-label"><i class="fas fa-boxes"></i> Total Unique Parts</div>
+                <div class="stat-value" id="totalUniqueParts">0</div>
+                <div class="stat-trend" id="totalUniquePartsTrend">N/A</div>
+            </div>
+            <div class="stat-card low-stock" role="region" aria-labelledby="low-stock-heading">
+                <div class="stat-label"><i class="fas fa-exclamation-circle"></i> Low Stock Items</div>
+                <div class="stat-value" id="lowStockItems">0</div>
+                <div class="stat-trend" id="lowStockItemsTrend">N/A</div>
+            </div>
+            <div class="stat-card" role="region" aria-labelledby="inventory-value-heading">
+                <div class="stat-label"><i class="fas fa-dollar-sign"></i> Total Inventory Value</div>
+                <div class="stat-value" id="totalInventoryValue">0</div>
+                <div class="stat-trend" id="totalInventoryValueTrend">N/A</div>
+            </div>
+            <div class="stat-card" role="region" aria-labelledby="parts-used-heading">
+                <div class="stat-label"><i class="fas fa-chart-line"></i> Parts Used Last Month</div>
+                <div class="stat-value" id="partsUsedLastMonth">0</div>
+                <div class="stat-trend" id="partsUsedLastMonthTrend">N/A</div>
+            </div>
+        </div>
 
-                            <label for="newPartCategory">Category:</label>
-                            <select id="newPartCategory" name="category" required>
-                                <option value="">Select Category</option>
-                                <option value="Filters">Filters</option>
-                                <option value="Fluids">Fluids</option>
-                                <option value="Electrical">Electrical</option>
-                                <option value="Engine Components">Engine Components</option>
-                                <option value="Fuel System">Fuel System</option>
-                                <option value="Cooling System">Cooling System</option>
-                            </select>
+        <div class="filter-bar">
+            <input type="text" placeholder="Search parts by name or number..." id="partSearch">
+            <select id="partCategoryFilter">
+                <option value="">All Categories</option>
+                <option value="Filters">Filters</option>
+                <option value="Electrical">Electrical</option>
+                <option value="Fluids">Fluids</option>
+                <option value="Ignition">Ignition</option>
+                <option value="Belts">Belts</option>
+                <!-- Add more categories as needed -->
+            </select>
+            <select id="partStatusFilter">
+                <option value="">All Statuses</option>
+                <option value="In Stock">In Stock</option>
+                <option value="Low Stock">Low Stock</option>
+                <option value="Out of Stock">Out of Stock</option>
+            </select>
+            <button id="applyPartFilters"><i class="fas fa-filter"></i> Apply Filters</button>
+            <button id="resetPartFilters"><i class="fas fa-redo"></i> Reset</button>
+        </div>
 
-                            <label for="newPartDescription">Description:</label>
-                            <textarea id="newPartDescription" name="description" rows="3" placeholder="e.g., Standard oil filter for GenPro X100 series."></textarea>
-                        </div>
-                    </div>
+        <div class="table-container">
+            <div id="loading-indicator" style="text-align: center; padding: 2rem;">
+                <div class="spinner"></div>
+                <p>Loading parts data...</p>
+            </div>
+            <table id="partsTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-sort="name">Part Name</th>
+                        <th class="sortable" data-sort="part_number">Part Number</th>
+                        <th class="sortable" data-sort="quantity_in_stock">Quantity</th>
+                        <th class="sortable" data-sort="cost_per_unit">Cost/Unit</th>
+                        <th class="sortable" data-sort="category">Category</th>
+                        <th class="sortable" data-sort="status">Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Parts data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination">
+            <button id="prevPage"><i class="fas fa-chevron-left"></i></button>
+            <div id="pageNumbers">
+                <!-- Page numbers will be populated by JavaScript -->
+            </div>
+            <button id="nextPage"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+</main>
 
-                    <!-- Section 2: Stock & Cost -->
-                    <div class="form-section" id="section-stock-cost">
-                        <div class="detail-card">
-                            <h4>Stock & Cost</h4>
-                            <label for="newPartQuantity">Quantity in Stock:</label>
-                            <input type="number" id="newPartQuantity" name="quantity" placeholder="e.g., 50" min="0" required>
+<!-- Add/Edit Part Modal -->
+<div class="modal" id="partModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="partModalTitle">Add New Part</h3>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="partForm">
+                <input type="hidden" id="partId">
+                <label for="partName">Part Name:</label>
+                <input type="text" id="partName" name="name" required>
+                <label for="partNumber">Part Number:</label>
+                <input type="text" id="partNumber" name="part_number" required>
+                <label for="quantityInStock">Quantity In Stock:</label>
+                <input type="number" id="quantityInStock" name="quantity_in_stock" min="0" required>
+                <label for="costPerUnit">Cost Per Unit (Ksh):</label>
+                <input type="number" id="costPerUnit" name="cost_per_unit" step="0.01" min="0" required>
+                <label for="partCategory">Category:</label>
+                <input type="text" id="partCategory" name="category">
+                <label for="minStockLevel">Minimum Stock Level:</label>
+                <input type="number" id="minStockLevel" name="min_stock_level" min="0">
+                <label for="preferredSupplier">Preferred Supplier:</label>
+                <input type="text" id="preferredSupplier" name="preferred_supplier">
+                <label for="lastOrdered">Last Ordered Date:</label>
+                <input type="date" id="lastOrdered" name="last_ordered">
+                <label for="usedLastMonth">Used Last Month:</label>
+                <input type="number" id="usedLastMonth" name="used_last_month" min="0">
+                <label for="compatibleGenerators">Compatible Generators (comma-separated):</label>
+                <input type="text" id="compatibleGenerators" name="compatible_generators">
+                <label for="partLocation">Location:</label>
+                <input type="text" id="partLocation" name="location">
+                <label for="reorderPoint">Reorder Point:</label>
+                <input type="number" id="reorderPoint" name="reorder_point" min="0">
+                <label for="leadTime">Lead Time (days):</label>
+                <input type="number" id="leadTime" name="lead_time" min="0">
+                <label for="partNotes">Notes:</label>
+                <textarea id="partNotes" name="notes"></textarea>
+                <label for="partStatus">Status:</label>
+                <select id="partStatus" name="status" required>
+                    <option value="In Stock">In Stock</option>
+                    <option value="Low Stock">Low Stock</option>
+                    <option value="Out of Stock">Out of Stock</option>
+                </select>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-close">Cancel</button>
+            <button class="btn-save" type="submit" form="partForm">Save Part</button>
+        </div>
+    </div>
+</div>
 
-                            <label for="newPartMinStock">Minimum Stock Level:</label>
-                            <input type="number" id="newPartMinStock" name="minStock" placeholder="e.g., 10" min="0">
+<!-- Sign In/Up Modal -->
+<div class="modal" id="signInUpModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Sign In / Sign Up</h3>
+            <button class="close-modal" id="closeSignInUpModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="tab-buttons">
+                <button class="tab-button active" data-tab="login">Login</button>
+                <button class="tab-button" data-tab="signup">Sign Up</button>
+            </div>
 
-                            <label for="newPartCost">Cost per Unit ($):</label>
-                            <input type="number" id="newPartCost" name="cost" placeholder="e.g., 15.00" min="0" step="0.01" required>
-
-                            <label for="newPartTotalValue">Total Value ($):</label>
-                            <input type="number" id="newPartTotalValue" name="totalValue" placeholder="Calculated automatically" readonly>
-                        </div>
-                    </div>
-
-                    <!-- Section 3: Supplier & Usage -->
-                    <div class="form-section" id="section-supplier-usage">
-                        <div class="detail-card">
-                            <h4>Supplier & Usage</h4>
-                            <label for="newPartSupplier">Preferred Supplier:</label>
-                            <input type="text" id="newPartSupplier" name="supplier" placeholder="e.g., FilterCo">
-
-                            <label for="newPartLastOrdered">Last Ordered Date:</label>
-                            <input type="date" id="newPartLastOrdered" name="lastOrdered">
-
-                            <label for="newPartUsedLastMonth">Units Used Last Month:</label>
-                            <input type="number" id="newPartUsedLastMonth" name="usedLastMonth" placeholder="e.g., 15" min="0">
-
-                            <label for="newPartCompatibleGens">Compatible Generators (comma-separated):</label>
-                            <input type="text" id="newPartCompatibleGens" name="compatibleGens" placeholder="e.g., GenPro X100, GenPro X200">
-                        </div>
-                    </div>
-
-                    <!-- Section 4: Stock Status -->
-                    <div class="form-section" id="section-stock-status">
-                        <div class="detail-card">
-                            <h4>Stock Status</h4>
-                            <label for="newPartStatus">Current Status:</label>
-                            <select id="newPartStatus" name="status" required>
-                                <option value="In Stock">In Stock</option>
-                                <option value="Low Stock">Low Stock</option>
-                                <option value="Out of Stock">Out of Stock</option>
-                            </select>
-
-                            <label for="newPartLocation">Warehouse Location:</label>
-                            <input type="text" id="newPartLocation" name="location" placeholder="e.g., Warehouse Shelf A3">
-
-                            <label for="newPartReorderPoint">Reorder Point:</label>
-                            <input type="number" id="newPartReorderPoint" name="reorderPoint" placeholder="e.g., 15" min="0">
-
-                            <label for="newPartLeadTime">Lead Time (days):</label>
-                            <input type="number" id="newPartLeadTime" name="leadTime" placeholder="e.g., 3-5" min="0">
-                        </div>
-                    </div>
-
-                    <!-- Section 5: Notes -->
-                    <div class="form-section" id="section-part-notes">
-                        <div class="notes-section">
-                            <h4>Notes</h4>
-                            <div class="detail-card">
-                                <textarea id="newPartNotes" name="notes" rows="4" placeholder="Any additional notes or history..."></textarea>
-                            </div>
-                        </div>
-                    </div>
+            <div id="loginTab" class="tab-content active">
+                <form id="loginForm">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                    <button type="submit" class="reports-button">Login</button>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button class="btn-close">Cancel</button>
-                <button class="btn-print" id="prevPartSectionBtn" style="display: none;"><i class="fas fa-chevron-left"></i> Previous</button>
-                <button class="btn-print" id="nextPartSectionBtn">Next <i class="fas fa-chevron-right"></i></button>
-                <button class="btn-print" type="submit" form="addPartForm" id="submitNewPartFormBtn" style="display: none;"><i class="fas fa-plus-circle"></i> Add Part</button>
+
+            <div id="signupTab" class="tab-content">
+                <form id="signupForm">
+                    <label for="signupName">Full Name:</label>
+                    <input type="text" id="signupName" name="name" required>
+                    <label for="signupEmail">Email:</label>
+                    <input type="email" id="signupEmail" name="email" required>
+                    <label for="signupPassword">Password:</label>
+                    <input type="password" id="signupPassword" name="password" required minlength="6">
+                    <label for="signupRole">Role:</label>
+                    <select id="signupRole" name="role" required>
+                        <option value="client">Client</option>
+                        <option value="technician">Technician</option>
+                        <!-- Removed Admin option for direct sign-up -->
+                    </select>
+                    <button type="submit" class="reports-button">Sign Up</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="module" src="script.js"></script>
+<!-- First Login Password Change Modal (REMOVED - NO LONGER NEEDED) -->
+<!-- The modal with id="firstLoginModal" and its content should be removed -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module" src="script.js"></script>
 </body>
 </html>

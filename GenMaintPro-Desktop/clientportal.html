@@ -1,3 +1,4 @@
+<!-- FileName: /clientportal.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,23 +18,23 @@
                 <p>Generator Maintenance System</p>
             </div>
         </div>
-        <button class="menu-button" aria-label="Menu" aria-expanded="false">
+        <!-- <button class="menu-button" aria-label="Menu" aria-expanded="false">
             <span class="menu-icon">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
             </span>
             <span class="menu-text">Menu</span>
-        </button>       
+        </button> -->
         <div class="header-container">
             <div class="nav-container" id="main-nav">
                 <ul class="nav-links" role="menu">
-                    <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="registry.html"><i class="fas fa-list"></i> Registry</a></li>
-                    <li><a href="schedule.html"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
-                    <li><a href="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
-                    <li><a href="parts.html"><i class="fas fa-cogs"></i> Parts</a></li>
-                    <li><a href="team.html"><i class="fas fa-users"></i> Team</a></li>
+                    <li><a href="#" data-page="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#" data-page="registry.html"><i class="fas fa-list"></i> Registry</a></li>
+                    <li><a href="#" data-page="schedule.html"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
+                    <li><a href="#" data-page="records.html"><i class="fas fa-clipboard-list"></i> Records</a></li>
+                    <li><a href="#" data-page="parts.html"><i class="fas fa-cogs"></i> Parts</a></li>
+                    <li><a href="#" data-page="team.html"><i class="fas fa-users"></i> Team</a></li>
                 </ul>
             </div>
             <div class="nav-actions">
@@ -41,9 +42,13 @@
                     <i class="fas fa-moon" id="darkModeIcon"></i>
                     <span id="darkModeText">Light Mode</span>
                 </button>
-                <a href="reports.html" class="reports-button"><i class="fas fa-chart-bar"></i> Reports</a>
-                <a href="signin.html" class="signing-button"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-                <a href="clientportal.html" class="client-button active"><i class="fas fa-user-circle"></i> Client Portal</a>
+                <a href="#" data-page="reports.html" class="reports-button"><i class="fas fa-chart-bar"></i> Reports</a>
+                <!-- Dynamic Sign In/Out Button -->
+                <a href="#" class="signing-button" id="authButton"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+                <!-- Client Portal Link (conditionally visible) -->
+                <a href="#" data-page="clientportal.html" class="client-button active" id="clientPortalLink"><i class="fas fa-user-circle"></i> Client Portal</a>
+                <!-- Admin Panel Link (conditionally visible) -->
+                <a href="#" data-page="admin.html" class="client-button" id="adminPanelLink"><i class="fas fa-user-shield"></i> Admin Panel</a>
             </div>
         </div>
     </nav>
@@ -56,11 +61,11 @@
                 <h2 id="client-portal-heading"><i class="fas fa-user-circle"></i> Client Portal</h2>
                 <p>View your assigned generators and their service history.</p>
             </div>
-            <button class="reports-button"><i class="fas fa-file-export"></i> Export Data</button>
+            <button class="reports-button" id="exportClientData"><i class="fas fa-file-export"></i> Export Data</button>
         </div>
 
         <div class="client-info stat-card">
-            <div class="stat-label"><i class="fas fa-handshake"></i> Welcome, [Client Name]!</div>
+            <div class="stat-label"><i class="fas fa-handshake"></i> Welcome, <span id="clientNameDisplay">[Client Name]</span>!</div>
             <div class="stat-trend">Here's an overview of your generators and their recent services.</div>
         </div>
 
@@ -68,9 +73,9 @@
             <input type="text" placeholder="Search by Generator, Serial No..." id="clientGeneratorSearch">
             <select id="clientGeneratorStatusFilter">
                 <option value="">All Statuses</option>
-                <option value="completed">Completed</option>
-                <option value="pending">Pending</option>
-                <option value="overdue">Overdue</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+                <option value="Maintenance">Maintenance</option>
             </select>
             <input type="date" id="clientDateFrom" placeholder="From Date">
             <input type="date" id="clientDateTo" placeholder="To Date">
@@ -87,9 +92,10 @@
                 <thead>
                     <tr>
                         <th class="sortable" data-sort="model">Generator Model</th>
-                        <th class="sortable" data-sort="serial">Serial Number</th>
-                        <th class="sortable" data-sort="lastService">Last Service Date</th>
-                        <th class="sortable" data-sort="nextService">Next Service Date</th>
+                        <th class="sortable" data-sort="serial_number">Serial Number</th>
+                        <th class="sortable" data-sort="location">Location</th>
+                        <th class="sortable" data-sort="last_service">Last Service Date</th>
+                        <th class="sortable" data-sort="next_service">Next Service Date</th>
                         <th class="sortable" data-sort="status">Status</th>
                         <th>Actions</th>
                     </tr>
@@ -101,11 +107,11 @@
         </div>
 
         <div class="pagination">
-            <button><i class="fas fa-chevron-left"></i></button>
-            <button class="active">1</button>
-            <button>2</button>
-            <button>3</button>
-            <button><i class="fas fa-chevron-right"></i></button>
+            <button id="prevPage"><i class="fas fa-chevron-left"></i></button>
+            <div id="pageNumbers">
+                <!-- Page numbers will be populated by JavaScript -->
+            </div>
+            <button id="nextPage"><i class="fas fa-chevron-right"></i></button>
         </div>
     </section>
 </main>
@@ -120,40 +126,40 @@
             <div class="detail-grid">
                 <div class="detail-card">
                     <h4>Service Information</h4>
-                    <p><strong>ID:</strong> <span data-key="id">SRV-001</span></p>
-                    <p><strong>Date:</strong> <span data-key="date">March 10, 2024</span></p>
-                    <p><strong>Duration:</strong> <span data-key="duration">2.5 hours</span></p>
-                    <p><strong>Type:</strong> <span data-key="type">Scheduled Maintenance</span></p>
+                    <p><strong>ID:</strong> <span data-key="id"></span></p>
+                    <p><strong>Date:</strong> <span data-key="service_date"></span></p>
+                    <p><strong>Duration:</strong> <span data-key="duration"></span></p>
+                    <p><strong>Type:</strong> <span data-key="service_type"></span></p>
                 </div>
 
                 <div class="detail-card">
                     <h4>Generator Details</h4>
-                    <p><strong>Model:</strong> <span data-key="generator">GenPro X100</span></p>
-                    <p><strong>Serial No:</strong> <span data-key="serial">SN-GPX100-001</span></p>
-                    <p><strong>Location:</strong> <span data-key="location">Warehouse A</span></p>
-                    <p><strong>Hours Run:</strong> <span data-key="hoursRun">1,250 hrs</span></p>
+                    <p><strong>Model:</strong> <span data-key="generator_model"></span></p>
+                    <p><strong>Serial No:</strong> <span data-key="generator_serial"></span></p>
+                    <p><strong>Location:</strong> <span data-key="generator_location"></span></p>
+                    <p><strong>Hours Run:</strong> <span data-key="total_hours_run"></span></p>
                 </div>
 
                 <div class="detail-card">
                     <h4>Technician</h4>
-                    <p><strong>Name:</strong> <span data-key="tech">John Doe</span></p>
-                    <p><strong>Contact:</strong> <span data-key="techContact">john.doe@example.com</span></p>
-                    <p><strong>Team:</strong> <span data-key="techTeam">Maintenance Crew A</span></p>
-                    <p><strong>Certification:</strong> <span data-key="techCertification">Level 3 Generator Tech</span></p>
+                    <p><strong>Name:</strong> <span data-key="technician_name"></span></p>
+                    <p><strong>Contact:</strong> <span data-key="technician_email"></span></p>
+                    <p><strong>Team:</strong> <span data-key="technician_team"></span></p>
+                    <p><strong>Certification:</strong> <span data-key="technician_certifications"></span></p>
                 </div>
 
                 <div class="detail-card">
                     <h4>Service Details</h4>
-                    <p><strong>Status:</strong> <span class="status-badge" data-key="status">Completed</span></p>
-                    <p><strong>Next Service:</strong> <span data-key="next">September 10, 2024</span></p>
-                    <p><strong>Service Cost:</strong> <span data-key="serviceCost">$350.00</span></p>
-                    <p><strong>Work Order:</strong> <span data-key="workOrder">WO-2024-001</span></p>
+                    <p><strong>Status:</strong> <span class="status-badge" data-key="status"></span></p>
+                    <p><strong>Next Service:</strong> <span data-key="generator_next_service"></span></p>
+                    <p><strong>Service Cost:</strong> <span data-key="service_cost"></span></p>
+                    <p><strong>Work Order:</strong> <span data-key="work_order"></span></p>
                 </div>
             </div>
 
             <div class="parts-list">
                 <h4>Parts Used</h4>
-                <ul data-key="partsUsed">
+                <ul data-key="parts_used">
                     <!-- Parts will be populated by JavaScript -->
                 </ul>
             </div>
@@ -161,17 +167,88 @@
             <div class="notes-section">
                 <h4>Technician Notes</h4>
                 <div class="detail-card">
-                    <p data-key="notes">Generator was running smoothly with no abnormal vibrations. Oil change completed, filters replaced, and all connections checked. Battery tested at 95% capacity. Recommend monitoring oil consumption over next 100 hours.</p>
+                    <p data-key="notes"></p>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
             <button class="btn-close">Close</button>
-            <button class="btn-print"><i class="fas fa-print"></i> Print Record</button>
+            <button class="btn-print" id="printServiceRecord"><i class="fas fa-print"></i> Print Record</button>
         </div>
     </div>
 </div>
 
+<!-- Sign In/Up Modal -->
+<div class="modal" id="signInUpModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Sign In / Sign Up</h3>
+            <button class="close-modal" id="closeSignInUpModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="tab-buttons">
+                <button class="tab-button active" data-tab="login">Login</button>
+                <button class="tab-button" data-tab="signup">Sign Up</button>
+            </div>
+
+            <div id="loginTab" class="tab-content active">
+                <form id="loginForm">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                    <button type="submit" class="reports-button">Login</button>
+                </form>
+            </div>
+
+            <div id="signupTab" class="tab-content">
+                <form id="signupForm">
+                    <label for="signupName">Full Name:</label>
+                    <input type="text" id="signupName" name="name" required>
+                    <label for="signupEmail">Email:</label>
+                    <input type="email" id="signupEmail" name="email" required>
+                    <label for="signupPassword">Password:</label>
+                    <input type="password" id="signupPassword" name="password" required minlength="6">
+                    <label for="signupRole">Role:</label>
+                    <select id="signupRole" name="role" required>
+                        <option value="client">Client</option>
+                        <option value="technician">Technician</option>
+                        <!-- Removed Admin option for direct sign-up -->
+                    </select>
+                    <button type="submit" class="reports-button">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- First Login Password Change Modal -->
+<div class="modal" id="firstLoginModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Change Default Password</h3>
+            <button class="close-modal" id="closeFirstLoginModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>It looks like this is your first time logging in with the default admin account. For security, please change your password and update your details.</p>
+            <form id="firstLoginForm">
+                <div class="detail-card">
+                    <label for="newAdminName">Full Name:</label>
+                    <input type="text" id="newAdminName" name="newName" required>
+                    <label for="newAdminEmail">Email:</label>
+                    <input type="email" id="newAdminEmail" name="newEmail" required>
+                    <label for="newAdminPassword">New Password:</label>
+                    <input type="password" id="newAdminPassword" name="newPassword" required minlength="6">
+                    <label for="confirmAdminPassword">Confirm New Password:</label>
+                    <input type="password" id="confirmAdminPassword" name="confirmPassword" required minlength="6">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="reports-button" type="submit" form="firstLoginForm"><i class="fas fa-save"></i> Set New Password</button>
+        </div>
+    </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="module" src="script.js"></script>
 </body>
