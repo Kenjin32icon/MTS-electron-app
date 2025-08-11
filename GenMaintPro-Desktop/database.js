@@ -312,7 +312,7 @@ async function ensureDefaultAdminExists() {
                 // Use the fixed ID for the default admin
                 const adminId = DEFAULT_ADMIN_CREDENTIALS.id;
                 db.run(`INSERT INTO users (id, name, email, password_hash, role, status, first_login, permissions, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
-                    [adminId, DEFAULT_ADMIN_CREDENTIALS.name, DEFAULT_ADMIN_CREDENTIALS.email, hashedPassword, DEFAULT_ADMIN_CREDENTIALS.role, DEFAULT_ADMIN_CREDENTIALS.first_login, JSON.stringify(DEFAULT_ADMIN_CREDENTIALS.permissions)],
+                    [adminId, DEFAULT_ADMIN_CREDENTIALS.name, DEFAULT_ADMIN_CREDENTIALS.email, hashedPassword, DEFAULT_ADMIN_CREDENTIALS.role, DEFAULT_ADMIN_CREDENTIALS.status, DEFAULT_ADMIN_CREDENTIALS.first_login, JSON.stringify(DEFAULT_ADMIN_CREDENTIALS.permissions)],
                     function(insertErr) {
                         if (insertErr) {
                             console.error("Error inserting default admin:", insertErr.message);
