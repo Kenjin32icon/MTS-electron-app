@@ -1,7 +1,7 @@
 // FileName: /authService.js
-const { getDb, logUserAction } = require('./database');
-const bcrypt = require('bcrypt');
+const { getDb, logUserAction } = require('./database'); // Import logUserAction
 const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcrypt');
 const { DEFAULT_ADMIN_CREDENTIALS } = require('./data'); // Import default admin credentials
 
 const authService = {

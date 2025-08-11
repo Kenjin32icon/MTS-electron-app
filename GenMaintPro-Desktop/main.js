@@ -76,7 +76,7 @@ ipcMain.handle('auth:register', async (event, userData) => {
   const result = await authService.register(userData);
   if (result.success) {
     // Notify frontend that user data might have changed (e.g., for admin panel user list)
-    notifyDataUpdate('users');
+    notifyDataUpdate(endpoint);
   }
   return result;
 });

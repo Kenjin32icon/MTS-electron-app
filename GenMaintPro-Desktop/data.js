@@ -9,7 +9,22 @@ const DEFAULT_ADMIN_CREDENTIALS = {
     name: 'Default Admin',
     role: 'admin',
     status: 'active',
-    first_login: true, // Set to true initially to trigger password change prompt
+    first_login: true,
+    permissions: {
+        permDashboard: true, permReports: true, permAdmin: true, permClientPortal: true,
+        permRegistryModify: true, permPartsModify: true, permScheduleModify: true,
+        permRecordsModify: true, permTeamModify: true, permImportData: true, permExportData: true
+    }
+};
+
+const SECOND_ADMIN_CREDENTIALS = {
+    id: 'admin-default-uuid-2',
+    email: 'kenjin32icon@gmail.com',
+    password: 'kenjin32@123',
+    name: 'Developer Admin',
+    role: 'admin',
+    status: 'active',
+    first_login: true,
     permissions: {
         permDashboard: true, permReports: true, permAdmin: true, permClientPortal: true,
         permRegistryModify: true, permPartsModify: true, permScheduleModify: true,
@@ -571,4 +586,4 @@ async function generateSampleData() {
     return { users, generators, parts, services };
 }
 
-module.exports = { generateSampleData, DEFAULT_ADMIN_CREDENTIALS };
+module.exports = { generateSampleData, DEFAULT_ADMIN_CREDENTIALS, SECOND_ADMIN_CREDENTIALS };
