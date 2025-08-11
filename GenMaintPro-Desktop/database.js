@@ -3,7 +3,7 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid'); // Ensure uuidv4 is imported
-const { generateSampleData, DEFAULT_ADMIN_CREDENTIALS } = require('./data'); // Import the sample data generator and default admin
+const { generateSampleData, DEFAULT_ADMIN_CREDENTIALS, SECOND_ADMIN_CREDENTIALS } = require('./data'); // Import second admin
 
 let db;
 let electronAppInstance; // To hold the app instance
@@ -300,34 +300,28 @@ async function populateSampleData() {
 }
 
 async function ensureDefaultAdminExists() {
-    return new Promise((resolve, reject) => {
-        db.get("SELECT id FROM users WHERE email = ?", [DEFAULT_ADMIN_CREDENTIALS.email], async (err, row) => {
-            if (err) {
-                console.error("Error checking for default admin:", err.message);
-                return reject(err);
-            }
-            if (!row) {
-                console.log("Default admin not found, creating...");
-                const hashedPassword = await bcrypt.hash(DEFAULT_ADMIN_CREDENTIALS.password, 10);
-                // Use the fixed ID for the default admin
-                const adminId = DEFAULT_ADMIN_CREDENTIALS.id;
-                db.run(`INSERT INTO users (id, name, email, password_hash, role, status, first_login, permissions, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
-                    [adminId, DEFAULT_ADMIN_CREDENTIALS.name, DEFAULT_ADMIN_CREDENTIALS.email, hashedPassword, DEFAULT_ADMIN_CREDENTIALS.role, DEFAULT_ADMIN_CREDENTIALS.status, DEFAULT_ADMIN_CREDENTIALS.first_login, JSON.stringify(DEFAULT_ADMIN_CREDENTIALS.permissions)],
-                    function(insertErr) {
-                        if (insertErr) {
-                            console.error("Error inserting default admin:", insertErr.message);
-                            return reject(insertErr);
+    // Helper to insert an admin if not exists
+    async function insertAdminIfMissing(admin) {
+        return new Promise((resolve, reject) => {
+            db.get("SELECT id FROM users WHERE email = ?", [admin.email], async (err, row) => {
+                if (err) return reject(err);
+                if (!row) {
+                    const hashedPassword = await bcrypt.hash(admin.password, 10);
+                    db.run(`INSERT INTO users (id, name, email, password_hash, role, status, first_login, permissions, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+                        [admin.id, admin.name, admin.email, hashedPassword, admin.role, admin.status, admin.first_login, JSON.stringify(admin.permissions)],
+                        function(insertErr) {
+                            if (insertErr) return reject(insertErr);
+                            resolve();
                         }
-                        console.log("Default admin created successfully.");
-                        resolve();
-                    }
-                );
-            } else {
-                console.log("Default admin already exists.");
-                resolve();
-            }
+                    );
+                } else {
+                    resolve();
+                }
+            });
         });
-    });
+    }
+    await insertAdminIfMissing(DEFAULT_ADMIN_CREDENTIALS);
+    await insertAdminIfMissing(SECOND_ADMIN_CREDENTIALS);
 }
 
 function getDb() {
