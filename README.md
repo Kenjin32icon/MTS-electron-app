@@ -11,6 +11,10 @@
     ```
 *   **Install Electron and other dependencies:**
     ```bash
+<<<<<<< HEAD
     npm install electron bcrypt sqlite3 uuid fs-extra
+=======
+    npm install electron --save-dev, bcrypt sqlite3 uuid fs-extra
+>>>>>>> 2669a6b (deleted the previous giti init , aded the node_modules to the gitignore)
     ```
  
