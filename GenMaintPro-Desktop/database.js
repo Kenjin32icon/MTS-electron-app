@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require('uuid'); // Ensure uuidv4 is imported
 const { generateSampleData, DEFAULT_ADMIN_CREDENTIALS, SECOND_ADMIN_CREDENTIALS } = require('./data'); // Import second admin
 
 let db;
-let electronAppInstance; // To hold the app instance
+// let electronAppInstance; // To hold the app instance
 
 function getDbPath(appInstance) {
   return path.join(appInstance.getPath('userData'), 'genmaintpro.db');
