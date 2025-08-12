@@ -76,7 +76,7 @@ ipcMain.handle('auth:register', async (event, userData) => {
   const result = await authService.register(userData);
   if (result.success) {
     // Notify frontend that user data might have changed (e.g., for admin panel user list)
-    notifyDataUpdate(endpoint);
+    notifyDataUpdate('users'); // Notify 'users' channel
   }
   return result;
 });
@@ -182,7 +182,7 @@ ipcMain.handle('admin:resetData', async (event, credentials) => {
 
   try {
     // clearAndInitializeDatabase now handles re-adding the default admin
-    await clearAndInitializeDatabase();
+    await clearAndInitializeDatabase(app); // Pass app instance
     await logUserAction(authResult.user.id, 'RESET_DATA_SUCCESS', `Database reset and re-initialized by admin ${authResult.user.email}`);
     // After reset, clear current user session as data is wiped
     currentUser = null;

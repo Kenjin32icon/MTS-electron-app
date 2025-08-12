@@ -657,8 +657,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (actionLoadingIndicator) actionLoadingIndicator.style.display = 'block';
             if (userActionsTable) userActionsTable.style.display = 'none';
 
+            // Load admin stats
             await loadDataForPage('adminPanelStats', displayAdminStats);
-            await loadDataForPage('users', displayUsersTable, null, displayUserRoleChart);
+            // Load users for the table and pass them to the chart display function
+            const usersData = await window.electronAPI.api.get('users');
+            displayUsersTable(usersData);
+            displayUserRoleChart(usersData); // Pass the fetched users data to the chart function
             await loadDataForPage('userActions', displayUserActionLogsTable);
         };
         loadAdminContent();
@@ -732,13 +736,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                     result = await window.electronAPI.api.post('users', userData);
                 }
 
-                if (result) {
+                if (result.success) { // Check for success property
                     alert('User saved successfully!');
                     const userModal = document.getElementById('userModal');
                     if (userModal) userModal.style.display = 'none';
                     loadAdminContent();
                 } else {
-                    alert('Failed to save user.');
+                    alert('Failed to save user: ' + result.message); // Display error message
                 }
             });
         }
@@ -749,7 +753,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (e.target.classList.contains('edit-btn')) {
                     const userId = e.target.dataset.id;
                     const user = await window.electronAPI.api.get('users', userId);
-                    if (user) {
+                    if (user && !user.message) { // Check if user object is valid and not an error message
                         const userModalTitle = document.getElementById('userModalTitle');
                         const userIdInput = document.getElementById('userId');
                         const userNameInput = document.getElementById('userName');
@@ -795,17 +799,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                         if (userModal) userModal.style.display = 'block';
                     } else {
-                        alert('User not found.');
+                        alert('User not found or error fetching user: ' + (user ? user.message : 'Unknown error'));
                     }
                 } else if (e.target.classList.contains('delete-btn')) {
                     const userId = e.target.dataset.id;
                     if (confirm(`Are you sure you want to delete user ${userId}?`)) {
                         const result = await window.electronAPI.api.delete('users', userId);
-                        if (result) {
+                        if (result.success) { // Check for success property
                             alert('User deleted successfully!');
                             loadAdminContent();
                         } else {
-                            alert('Failed to delete user.');
+                            alert('Failed to delete user: ' + result.message); // Display error message
                         }
                     }
                 }
@@ -821,12 +825,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const email = emailInput ? emailInput.value : '';
                 const password = passwordInput ? passwordInput.value : '';
                 try {
-                    const result = await window.electronAPI.admin.resetData({ email, password });
+                    const result = await window.electronAPI.resetData({ email, password });
                     if (result.success) {
                         alert(result.message);
                         const resetDbConfirmModal = document.getElementById('resetDbConfirmModal');
                         if (resetDbConfirmModal) resetDbConfirmModal.style.display = 'none';
-                        window.location.reload();
+                        window.location.reload(); // Reload the app to reflect the database reset
                     } else {
                         alert(result.message);
                     }
@@ -845,12 +849,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const email = emailInput ? emailInput.value : '';
                 const password = passwordInput ? passwordInput.value : '';
                 try {
-                    const result = await window.electronAPI.admin.loadSampleData({ email, password });
+                    const result = await window.electronAPI.loadSampleData({ email, password });
                     if (result.success) {
                         alert(result.message);
                         const loadSampleDataConfirmModal = document.getElementById('loadSampleDataConfirmModal');
                         if (loadSampleDataConfirmModal) loadSampleDataConfirmModal.style.display = 'none';
-                        loadAdminContent();
+                        loadAdminContent(); // Reload admin content to show new data
                     } else {
                         alert(result.message);
                     }
@@ -1024,13 +1028,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                     result = await window.electronAPI.api.post('parts', partData);
                 }
 
-                if (result) {
+                if (result.success) { // Check for success property
                     alert('Part saved successfully!');
                     const partModal = document.getElementById('partModal');
                     if (partModal) partModal.style.display = 'none';
                     loadPartsContent();
                 } else {
-                    alert('Failed to save part.');
+                    alert('Failed to save part: ' + result.message); // Display error message
                 }
             });
         }
@@ -1041,7 +1045,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (e.target.classList.contains('edit-btn')) {
                     const partId = e.target.dataset.id;
                     const part = await window.electronAPI.api.get('parts', partId);
-                    if (part) {
+                    if (part && !part.message) { // Check if part object is valid and not an error message
                         const partModalTitle = document.getElementById('partModalTitle');
                         const partIdInput = document.getElementById('partId');
                         const partNameInput = document.getElementById('partName');
@@ -1080,17 +1084,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                         if (partStatusInput) partStatusInput.value = part.status;
                         if (partModal) partModal.style.display = 'block';
                     } else {
-                        alert('Part not found.');
+                        alert('Part not found or error fetching part: ' + (part ? part.message : 'Unknown error'));
                     }
                 } else if (e.target.classList.contains('delete-btn')) {
                     const partId = e.target.dataset.id;
                     if (confirm(`Are you sure you want to delete part ${partId}?`)) {
                         const result = await window.electronAPI.api.delete('parts', partId);
-                        if (result) {
+                        if (result.success) { // Check for success property
                             alert('Part deleted successfully!');
                             loadPartsContent();
                         } else {
-                            alert('Failed to delete part.');
+                            alert('Failed to delete part: ' + result.message); // Display error message
                         }
                     }
                 }
@@ -1176,7 +1180,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (e.target.classList.contains('view-btn')) {
                     const serviceId = e.target.dataset.id;
                     const service = await window.electronAPI.api.get('services', serviceId);
-                    if (service) {
+                    if (service && !service.message) { // Check if service object is valid and not an error message
                         const serviceDetailsModal = document.getElementById('serviceDetailsModal');
                         if (serviceDetailsModal) {
                             serviceDetailsModal.querySelector('[data-key="id"]').textContent = service.id;
@@ -1223,7 +1227,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             serviceDetailsModal.style.display = 'block';
                         }
                     } else {
-                        alert('Service record not found.');
+                        alert('Service record not found or error fetching service: ' + (service ? service.message : 'Unknown error'));
                     }
                 } else if (e.target.classList.contains('edit-btn')) {
                     const serviceId = e.target.dataset.id;
@@ -1232,11 +1236,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const serviceId = e.target.dataset.id;
                     if (confirm(`Are you sure you want to delete service record ${serviceId}?`)) {
                         const result = await window.electronAPI.api.delete('services', serviceId);
-                        if (result) {
+                        if (result.success) { // Check for success property
                             alert('Service record deleted successfully!');
                             loadServiceRecordsContent();
                         } else {
-                            alert('Failed to delete service record.');
+                            alert('Failed to delete service record: ' + result.message); // Display error message
                         }
                     }
                 }
@@ -1395,15 +1399,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (e.target.classList.contains('view-btn')) {
                     const generatorId = e.target.dataset.id;
                     const generator = await window.electronAPI.api.get('generators', generatorId);
-                    if (generator) {
+                    if (generator && !generator.message) { // Check if generator object is valid and not an error message
                         alert(`Viewing details for generator: ${generator.model} (${generator.serial_number})`);
                     } else {
-                        alert('Generator not found.');
+                        alert('Generator not found or error fetching generator: ' + (generator ? generator.message : 'Unknown error'));
                     }
                 } else if (e.target.classList.contains('edit-btn')) {
                     const generatorId = e.target.dataset.id;
                     const generator = await window.electronAPI.api.get('generators', generatorId);
-                    if (generator) {
+                    if (generator && !generator.message) { // Check if generator object is valid and not an error message
                         openModal('generatorModal', 'Edit Generator', {
                             id: generator.id,
                             generatorModel: generator.model,
@@ -1450,17 +1454,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                         }
 
                     } else {
-                        alert('Generator not found.');
+                        alert('Generator not found or error fetching generator: ' + (generator ? generator.message : 'Unknown error'));
                     }
                 } else if (e.target.classList.contains('delete-btn')) {
                     const generatorId = e.target.dataset.id;
                     if (confirm(`Are you sure you want to delete generator ${generatorId}?`)) {
                         const result = await window.electronAPI.api.delete('generators', generatorId);
-                        if (result) {
+                        if (result.success) { // Check for success property
                             alert('Generator deleted successfully!');
                             loadRegistryContent();
                         } else {
-                            alert('Failed to delete generator.');
+                            alert('Failed to delete generator: ' + result.message); // Display error message
                         }
                     }
                 }
@@ -1594,13 +1598,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         async function populatePartSelect(selectElement) {
             const parts = await window.electronAPI.api.get('parts');
-            selectElement.innerHTML = '<option value="">Select Part</option>';
-            parts.forEach(part => {
-                const option = document.createElement('option');
-                option.value = part.id;
-                option.textContent = `${part.name} (${part.part_number})`;
-                selectElement.appendChild(option);
-            });
+            if (parts && !parts.message) { // Check if parts object is valid and not an error message
+                selectElement.innerHTML = '<option value="">Select Part</option>';
+                parts.forEach(part => {
+                    const option = document.createElement('option');
+                    option.value = part.id;
+                    option.textContent = `${part.name} (${part.part_number})`;
+                    selectElement.appendChild(option);
+                });
+            } else {
+                console.error('Error fetching parts for select: ' + (parts ? parts.message : 'Unknown error'));
+                selectElement.innerHTML = '<option value="">Error loading parts</option>';
+            }
         }
 
         const serviceForm = document.getElementById('serviceForm');
@@ -1656,15 +1665,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (e.target.classList.contains('view-btn')) {
                     const serviceId = e.target.dataset.id;
                     const service = await window.electronAPI.api.get('services', serviceId);
-                    if (service) {
+                    if (service && !service.message) { // Check if service object is valid and not an error message
                         alert(`Viewing details for scheduled service: ${service.service_type} on ${service.service_date}`);
                     } else {
-                        alert('Scheduled service not found.');
+                        alert('Scheduled service not found or error fetching service: ' + (service ? service.message : 'Unknown error'));
                     }
                 } else if (e.target.classList.contains('edit-btn')) {
                     const serviceId = e.target.dataset.id;
                     const service = await window.electronAPI.api.get('services', serviceId);
-                    if (service) {
+                    if (service && !service.message) { // Check if service object is valid and not an error message
                         openModal('serviceModal', 'Edit Service', {
                             id: service.id,
                             serviceGeneratorId: service.generator_id,
@@ -1680,7 +1689,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                         const generators = await window.electronAPI.api.get('generators');
                         const genSelect = document.getElementById('serviceGeneratorId');
-                        if (genSelect) {
+                        if (generators && !generators.message && genSelect) {
                             genSelect.innerHTML = '<option value="">Select Generator</option>';
                             generators.forEach(gen => {
                                 const option = document.createElement('option');
@@ -1689,11 +1698,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 genSelect.appendChild(option);
                             });
                             genSelect.value = service.generator_id || '';
+                        } else {
+                            console.error('Error fetching generators for select: ' + (generators ? generators.message : 'Unknown error'));
                         }
 
                         const technicians = await window.electronAPI.api.get('technicians');
                         const techSelect = document.getElementById('serviceTechnicianId');
-                        if (techSelect) {
+                        if (technicians && !technicians.message && techSelect) {
                             techSelect.innerHTML = '<option value="">Select Technician</option>';
                             technicians.forEach(tech => {
                                 const option = document.createElement('option');
@@ -1702,6 +1713,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 techSelect.appendChild(option);
                             });
                             techSelect.value = service.technician_id || '';
+                        } else {
+                            console.error('Error fetching technicians for select: ' + (technicians ? technicians.message : 'Unknown error'));
                         }
 
                         const partsUsedContainer = document.getElementById('partsUsedContainer');
@@ -1711,7 +1724,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 try {
                                     const parts = JSON.parse(service.parts_used);
                                     if (Array.isArray(parts)) {
-                                        parts.forEach(p => {
+                                        for (const p of parts) { // Use for...of for async operations if needed inside loop
                                             addPartUsedField();
                                             const lastItem = partsUsedContainer.lastElementChild ? partsUsedContainer.lastElementChild.previousElementSibling : null;
                                             if (lastItem) {
@@ -1720,7 +1733,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                                 if (partSelect) partSelect.value = p.part_id;
                                                 if (quantityInput) quantityInput.value = p.quantity;
                                             }
-                                        });
+                                        }
                                     }
                                 } catch (e) {
                                     console.error('Error parsing parts_used for edit:', e);
@@ -1732,17 +1745,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                         }
 
                     } else {
-                        alert('Scheduled service not found.');
+                        alert('Scheduled service not found or error fetching service: ' + (service ? service.message : 'Unknown error'));
                     }
                 } else if (e.target.classList.contains('delete-btn')) {
                     const serviceId = e.target.dataset.id;
                     if (confirm(`Are you sure you want to delete scheduled service ${serviceId}?`)) {
                         const result = await window.electronAPI.api.delete('services', serviceId);
-                        if (result) {
+                        if (result.success) { // Check for success property
                             alert('Scheduled service deleted successfully!');
                             loadScheduleContent();
                         } else {
-                            alert('Failed to delete scheduled service.');
+                            alert('Failed to delete scheduled service: ' + result.message); // Display error message
                         }
                     }
                 }
@@ -1874,15 +1887,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (e.target.classList.contains('view-btn')) {
                     const techId = e.target.dataset.id;
                     const technician = await window.electronAPI.api.get('technicians', techId);
-                    if (technician) {
+                    if (technician && !technician.message) { // Check if technician object is valid and not an error message
                         alert(`Viewing details for technician: ${technician.name} (${technician.email})`);
                     } else {
-                        alert('Technician not found.');
+                        alert('Technician not found or error fetching technician: ' + (technician ? technician.message : 'Unknown error'));
                     }
                 } else if (e.target.classList.contains('edit-btn')) {
                     const techId = e.target.dataset.id;
                     const technician = await window.electronAPI.api.get('technicians', techId);
-                    if (technician) {
+                    if (technician && !technician.message) { // Check if technician object is valid and not an error message
                         openModal('technicianModal', 'Edit Technician', {
                             id: technician.id,
                             techName: technician.name,
@@ -1899,17 +1912,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                         const techPasswordInput = document.getElementById('techPassword');
                         if (techPasswordInput) techPasswordInput.required = false;
                     } else {
-                        alert('Technician not found.');
+                        alert('Technician not found or error fetching technician: ' + (technician ? technician.message : 'Unknown error'));
                     }
                 } else if (e.target.classList.contains('delete-btn')) {
                     const techId = e.target.dataset.id;
                     if (confirm(`Are you sure you want to delete technician ${techId}?`)) {
                         const result = await window.electronAPI.api.delete('technicians', techId);
-                        if (result) {
+                        if (result.success) { // Check for success property
                             alert('Technician deleted successfully!');
                             loadTeamContent();
                         } else {
-                            alert('Failed to delete technician.');
+                            alert('Failed to delete technician: ' + result.message); // Display error message
                         }
                     }
                 }
@@ -2059,7 +2072,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         let chartData;
         try {
             chartData = await window.electronAPI.api.get('chartData');
-        } catch {
+            if (chartData.message) { // Check if it's an error message
+                throw new Error(chartData.message);
+            }
+        } catch (error) {
+            console.error("Error fetching chart data, falling back to sample:", error);
             const sample = await window.electronAPI.getSampleData();
             chartData = calculateSampleStats(sample.data, 'chartData');
         }
@@ -2102,22 +2119,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderServiceTrendChartAndTable();
     }
 
-    window.electronAPI.subscribeToData(getCurrentPage());
-    window.electronAPI.onDataUpdate((channel) => {
-        if (channel === getCurrentPage() || channel === '*') {
-            console.log(`Data updated for ${channel}, reloading content.`);
-            if (getCurrentPage() === 'index') {
-                loadDashboardContent();
-                renderServiceTrendChartAndTable();
+    // Ensure subscription is only done once and correctly
+    if (window.electronAPI.subscribeToDataUpdates && window.electronAPI.onDataUpdated) {
+        window.electronAPI.subscribeToDataUpdates(getCurrentPage());
+        window.electronAPI.onDataUpdated((channel) => {
+            if (channel === getCurrentPage() || channel === '*') {
+                console.log(`Data updated for ${channel}, reloading content.`);
+                if (getCurrentPage() === 'index') {
+                    loadDashboardContent();
+                    renderServiceTrendChartAndTable();
+                }
+                else if (getCurrentPage() === 'admin') loadAdminContent();
+                else if (getCurrentPage() === 'clientportal') loadClientPortalContent();
+                else if (getCurrentPage() === 'parts') loadPartsContent();
+                else if (getCurrentPage() === 'records') loadServiceRecordsContent();
+                else if (getCurrentPage() === 'registry') loadRegistryContent();
+                else if (getCurrentPage() === 'schedule') loadScheduleContent();
+                else if (getCurrentPage() === 'team') loadTeamContent();
+                else if (getCurrentPage() === 'reports') loadReportsContent();
             }
-            else if (getCurrentPage() === 'admin') loadAdminContent();
-            else if (getCurrentPage() === 'clientportal') loadClientPortalContent();
-            else if (getCurrentPage() === 'parts') loadPartsContent();
-            else if (getCurrentPage() === 'records') loadServiceRecordsContent();
-            else if (getCurrentPage() === 'registry') loadRegistryContent();
-            else if (getCurrentPage() === 'schedule') loadScheduleContent();
-            else if (getCurrentPage() === 'team') loadTeamContent();
-            else if (getCurrentPage() === 'reports') loadReportsContent();
-        }
-    });
+        });
+    }
 });

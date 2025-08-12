@@ -79,6 +79,8 @@ const apiService = {
             const publicEndpoints = ['dashboardStats', 'chartData'];
 
             // All endpoints now require permission check, with an exception for public ones
+            // The 'permDashboard' permission is used as a general access permission for public endpoints.
+            // If the endpoint is public, the permission check is bypassed for unauthenticated users.
             await checkPermission(userPermissions, 'permDashboard', userId, `Attempt to view ${endpoint} without permission`, publicEndpoints.includes(endpoint));
 
             switch (endpoint) {

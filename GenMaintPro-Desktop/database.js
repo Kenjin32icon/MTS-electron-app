@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require('uuid'); // Ensure uuidv4 is imported
 const { generateSampleData, DEFAULT_ADMIN_CREDENTIALS, SECOND_ADMIN_CREDENTIALS } = require('./data'); // Import second admin
 
 let db;
-// let electronAppInstance; // To hold the app instance
+let electronAppInstance; // To hold the app instance
 
 function getDbPath(appInstance) {
   return path.join(appInstance.getPath('userData'), 'genmaintpro.db');
@@ -152,9 +152,9 @@ async function initializeDatabase(appInstance) {
           await ensureDefaultAdminExists();
 
           // Check if any users (other than the default admin) exist. If not, populate with sample data.
-          db.get("SELECT COUNT(*) AS count FROM users WHERE id != ?", [DEFAULT_ADMIN_CREDENTIALS.id], async (err, row) => {
+          db.get("SELECT COUNT(*) AS count FROM users WHERE id != ? AND id != ?", [DEFAULT_ADMIN_CREDENTIALS.id, SECOND_ADMIN_CREDENTIALS.id], async (err, row) => {
             if (err) {
-              console.error("Error checking user count (excluding default admin):", err.message);
+              console.error("Error checking user count (excluding default admins):", err.message);
               return reject(err);
             }
             if (row.count === 0) {
@@ -210,7 +210,7 @@ async function populateSampleData() {
   // Insert Users (excluding the default admin, which is handled separately)
   for (const user of users) {
     // Only insert if the user is not the default admin
-    if (user.id !== DEFAULT_ADMIN_CREDENTIALS.id) {
+    if (user.id !== DEFAULT_ADMIN_CREDENTIALS.id && user.id !== SECOND_ADMIN_CREDENTIALS.id) {
         insertPromises.push(new Promise((resolve, reject) => {
             db.run(`INSERT OR IGNORE INTO users (id, name, email, password_hash, role, status, last_login, phone, address, employee_id, hire_date, team, certifications, specialties, notes, first_login, permissions, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [user.id, user.name, user.email, user.password_hash, user.role, user.status, user.last_login, user.phone, user.address, user.employee_id, user.hire_date, user.team, user.certifications, user.specialties, user.notes, user.first_login, user.permissions, user.created_at],
@@ -311,10 +311,12 @@ async function ensureDefaultAdminExists() {
                         [admin.id, admin.name, admin.email, hashedPassword, admin.role, admin.status, admin.first_login, JSON.stringify(admin.permissions)],
                         function(insertErr) {
                             if (insertErr) return reject(insertErr);
+                            console.log(`Default admin user ${admin.email} inserted.`);
                             resolve();
                         }
                     );
                 } else {
+                    console.log(`Default admin user ${admin.email} already exists.`);
                     resolve();
                 }
             });
@@ -328,7 +330,7 @@ function getDb() {
   return db;
 }
 
-async function clearAndInitializeDatabase() {
+async function clearAndInitializeDatabase(appInstance) { // Accept appInstance
   return new Promise((resolve, reject) => {
     db.close((err) => {
       if (err) {
@@ -336,12 +338,12 @@ async function clearAndInitializeDatabase() {
         return reject(err);
       }
       console.log('Database closed.');
-      const DB_PATH = getDbPath(electronAppInstance);
+      const DB_PATH = getDbPath(appInstance); // Use appInstance here
       try {
         require('fs').unlinkSync(DB_PATH);
         console.log('Database file deleted.');
         // Re-initialize will create tables and then populate default admin and sample data if no users exist
-        initializeDatabase(electronAppInstance).then(resolve).catch(reject);
+        initializeDatabase(appInstance).then(resolve).catch(reject); // Pass appInstance here
       } catch (unlinkErr) {
         console.error('Error deleting database file:', unlinkErr.message);
         reject(unlinkErr);
